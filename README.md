@@ -1,4 +1,4 @@
-# clawHub Skills
+# [clawHub Skills](https://clawhub.ai/u/jhauga)
 
 Repo of duplicate skill folders that are uploaded to [clawHub skills](https://clawhub.ai/skills?sort=downloads) but still available to view on GitHub.
 
@@ -8,7 +8,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 
 | Skill | Description |
 |-------|-------------|
-| [pdftk-server](pdftk-server/) | Skill for using the command-line tool `pdftk` for working with PDF files. |
+| [pdftk-server](pdftk-server/) (*repo*) <br> [pdftk-server](https://clawhub.ai/jhauga/pdftk-server) (*on ClawHub*) | Skill for using the command-line tool `pdftk` for working with PDF files. |
 
 ## Skill Structure
 
