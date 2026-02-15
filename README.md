@@ -28,4 +28,4 @@ Every skill follows the standard Agent Skills layout:
 1. Create a new folder with a lowercase, hyphenated name
 2. Add a `SKILL.md` file with the required YAML frontmatter (`name` and `description`)
 3. Add optional directories (`references/`, `scripts/`, `assets/`, `templates/`) as needed
-4. Update this README with the new skill entry
+4. Update this README with the new skill entry, linking to repo folder and skill on [ClawHub](https://clawhub.ai/)
