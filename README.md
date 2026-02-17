@@ -9,6 +9,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 | Skill | Description |
 |-------|-------------|
 | [pdftk-server](pdftk-server/) (*repo*) <br> [pdftk-server](https://clawhub.ai/jhauga/pdftk-server) (*on ClawHub*) | Skill for using the command-line tool `pdftk` for working with PDF files. |
+| [quasi-coder](quasi-coder/SKILL.md) (*repo*) <br> [quasi-coder](https://clawhub.ai/jhauga/quasi-coder) (*on ClawHub*) | Skill for interpreting and implementing code from shorthand, quasi-code, and natural language descriptions. |
 
 ## Skill Structure
 
