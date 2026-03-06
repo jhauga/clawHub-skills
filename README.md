@@ -12,6 +12,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 | [quasi-coder](quasi-coder/SKILL.md) (*repo*) <br> [quasi-coder](https://clawhub.ai/jhauga/quasi-coder) (*on ClawHub*) | Skill for interpreting and implementing code from shorthand, quasi-code, and natural language descriptions. |
 | [game-engine](game-engine/SKILL.md) (*repo*) <br> [game-engine](https://clawhub.ai/jhauga/game-engine) (*on ClawHub*) | Skill for creating and/or working on a game engine. |
 | [web-coder](web-coder/SKILL.md) (*repo*) <br> [web-coder](https://clawhub.ai/jhauga/web-coder) (*on ClawHub*) | Skill that covers core web concepts for general web programming. |
+| [typescript-coder](typescript-coder/SKILL.md) (*repo*) <br> [typescript-coder](https://clawhub.ai/jhauga/typescript-coder) (*on ClawHub*) | Skill that covers core TypeScript concepts for TypeScript programming. |
 
 ## Skill Structure
 
