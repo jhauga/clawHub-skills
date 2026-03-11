@@ -15,6 +15,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 | [typescript-coder](typescript-coder/SKILL.md) (*repo*) <br> [typescript-coder](https://clawhub.ai/jhauga/typescript-coder) (*on ClawHub*) | Skill that covers core TypeScript concepts for TypeScript programming. |
 | [html-coder](html-coder/SKILL.md) (*repo*) <br> [html-coder](https://clawhub.ai/jhauga/html-coder) (*on ClawHub*) | Skill that covers html-coder. |
 | [html-designer](html-designer/SKILL.md) (*repo*) <br> [html-designer](https://clawhub.ai/jhauga/html-designer) (*on ClawHub*) | Skill that covers html-designer. |
+| [typescript-package-manager](typescript-package-manager/SKILL.md) (*repo*) <br> [typescript-package-manager](https://clawhub.ai/jhauga/typescript-package-manager) (*on ClawHub*) | Skill that covers typescript-package-manager. |
 
 ## Skill Structure
 
