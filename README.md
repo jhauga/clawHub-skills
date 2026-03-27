@@ -16,6 +16,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 | [html-coder](html-coder/SKILL.md) (*repo*) <br> [html-coder](https://clawhub.ai/jhauga/html-coder) (*on ClawHub*) | Skill that covers html-coder. |
 | [html-designer](html-designer/SKILL.md) (*repo*) <br> [html-designer](https://clawhub.ai/jhauga/html-designer) (*on ClawHub*) | Skill that covers html-designer. |
 | [typescript-package-manager](typescript-package-manager/SKILL.md) (*repo*) <br> [typescript-package-manager](https://clawhub.ai/jhauga/typescript-package-manager) (*on ClawHub*) | Skill that covers typescript-package-manager. |
+| [use-cliche-data-in-docs](use-cliche-data-in-docs/SKILL.md) (*repo*) <br> [use-cliche-data-in-docs](https://clawhub.ai/jhauga/use-cliche-data-in-docs) (*on ClawHub*) | Skill that instructs agent to use cliche data for documentation. |
 
 ## Skill Structure
 
