@@ -1,9 +1,9 @@
 ---
-name: add-educational-comments
+name: add-educational-comment
 description: 'Add educational comments to the file specified, or prompt asking for file to comment if one is not provided.'
 ---
 
-# Add Educational Comments
+# Add Educational Comment
 
 Add educational comments to code files so they become effective learning resources. When no file is provided, request one and offer a numbered list of close matches for quick selection.
 
