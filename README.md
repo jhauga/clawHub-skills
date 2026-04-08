@@ -19,6 +19,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 | [use-cliche-data-in-docs](use-cliche-data-in-docs/SKILL.md) (*repo*) <br> [use-cliche-data-in-docs](https://clawhub.ai/jhauga/use-cliche-data-in-docs) (*on ClawHub*) | Skill that instructs agent to use cliche data for documentation. |
 | [update-docs-on-code-change](update-docs-on-code-change/SKILL.md) (*repo*) <br> [update-docs-on-code-change](https://clawhub.ai/jhauga/update-docs-on-code-change) (*on ClawHub*) | Skill that keeps documentation up-to-date when features change. |
 | [add-educational-comment](add-educational-comment/SKILL.md) (*repo*) <br> [add-educational-comments](https://clawhub.ai/jhauga/add-educational-comment) (*on ClawHub*) | Skill to comment existing code relative to context specified, defaulting to educational comments. |
+| [freecad-scripts](freecad-scripts/SKILL.md) (*repo*) <br> [freecad-scripts](https://clawhub.ai/jhauga/freecad-scripts) (*on ClawHub*) | Skill that covers freecad-scripts. |
 
 ## Skill Structure
 
