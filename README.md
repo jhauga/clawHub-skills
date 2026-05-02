@@ -6,6 +6,8 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 
 ## Skills
 
+### Total: 15
+
 | Skill | Description |
 |-------|-------------|
 | [pdftk-server](pdftk-server/) (*repo*) <br> [pdftk-server](https://clawhub.ai/jhauga/pdftk-server) (*on ClawHub*) | Skill for using the command-line tool `pdftk` for working with PDF files. |

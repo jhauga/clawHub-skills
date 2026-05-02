@@ -128,6 +128,43 @@ function generateRow(skillName, description) {
 }
 
 /**
+ * Count the number of skill rows in the Skills table
+ * @param {string} content - README content
+ * @returns {number} - Number of skill rows
+ */
+function countSkillRows(content) {
+  const tableHeaderPattern = /\|\s*Skill\s*\|\s*Description\s*\|/i;
+  const headerMatch = content.match(tableHeaderPattern);
+  if (!headerMatch) return 0;
+
+  const afterHeader = content.slice(headerMatch.index);
+  const lines = afterHeader.split('\n');
+  let count = 0;
+
+  for (let i = 0; i < lines.length; i++) {
+    // Skip header row (i=0) and separator row (i=1)
+    if (i <= 1) continue;
+    const line = lines[i].trim();
+    if (line.startsWith('|')) {
+      count++;
+    } else {
+      break;
+    }
+  }
+  return count;
+}
+
+/**
+ * Update the ### Total: N line in README.md
+ * @param {string} content - README content
+ * @param {number} count - New total count
+ * @returns {string} - Updated content
+ */
+function updateTotalCount(content, count) {
+  return content.replace(/###\s*Total:\s*\d+/i, `### Total: ${count}`);
+}
+
+/**
  * Main function to add a new skill to README.md
  * @param {string} skillName - Required. Name of the skill folder
  * @param {string} [description] - Optional. Description of the skill
@@ -187,15 +224,20 @@ function addSkill(skillName, description) {
     newRow + '\n' +
     readmeContent.slice(insertIndex);
 
+  // Count skill rows and update total
+  const skillCount = countSkillRows(updatedContent);
+  const finalContent = updateTotalCount(updatedContent, skillCount);
+
   // Write updated README.md
   try {
-    fs.writeFileSync(README_PATH, updatedContent, 'utf8');
+    fs.writeFileSync(README_PATH, finalContent, 'utf8');
   } catch (err) {
     throw new SkillError(`Failed to write README.md: ${err.message}`, 'README_WRITE_ERROR');
   }
 
   console.log(`✓ Successfully added skill "${skillName}" to README.md`);
   console.log(`  Description: ${description}`);
+  console.log(`  Total skills: ${skillCount}`);
 }
 
 /**
@@ -395,4 +437,4 @@ Examples:
   }
 }
 
-module.exports = { addSkill, removeSkillRow, runTest, SkillError };
+module.exports = { addSkill, removeSkillRow, runTest, SkillError, countSkillRows, updateTotalCount };
