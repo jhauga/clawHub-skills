@@ -22,6 +22,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 | [freecad-scripts](freecad-scripts/SKILL.md) (*repo*) <br> [freecad-scripts](https://clawhub.ai/jhauga/freecad-scripts) (*on ClawHub*) | Skill that covers freecad-scripts. |
 | [batch-files](batch-files/SKILL.md) (*repo*) <br> [batch-files](https://clawhub.ai/jhauga/batch-files) (*on ClawHub*) | Skill for creating, editing, and/or working with Windows batch files. |
 | [adobe-illustrator-scripting](adobe-illustrator-scripting/SKILL.md) (*repo*) <br> [adobe-illustrator-scripting](https://clawhub.ai/jhauga/adobe-illustrator-scripting) (*on ClawHub*) | New skill for working with Adobe Illustrator scripts. |
+| [content-management-systems](content-management-systems/SKILL.md) (*repo*) <br> [content-management-systems](https://clawhub.ai/jhauga/content-management-systems) (*on ClawHub*) | A new skill for working with content management systems. |
 
 ## Skill Structure
 
