@@ -63,6 +63,9 @@ before applying these rules.
 ## Rules of Conversion
 
 1. Find the target file named after the prompt prefix.
+  - Prompt for target file if:
+    - Ambiguous instructions
+    - Not certain the target file passed is the correct file
 2. Locate the section bounded by `${language:comment} start-shorthand` and
    `${language:comment} end-shorthand`.
 3. Interpret each `()=>`, `()->`, `()-->`, and similar line as ideation, a quick gist, or general
@@ -73,6 +76,7 @@ before applying these rules.
 6. If the prompt says `no need to edit code`, treat the target as a formatting or data-update task
   instead.
 7. The final result should not contain shorthand markers or shorthand prefixes.
+8. Have the user inspect diffs before accepting edits.
 
 ## Practical Example
 

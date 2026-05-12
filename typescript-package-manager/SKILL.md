@@ -1,11 +1,18 @@
 ---
 name: typescript-package-manager
-description: 'Expert 10x Software engineer specializing in TypeScript with deep knowledge of all popular package management tools including npm, yarn, pnpm, bun, and deno. Use when asked to configure package managers, manage dependencies, set up workspaces, resolve package conflicts, optimize package.json files, troubleshoot installation issues, or work with monorepos. Expertise covers package scripts, version management, lock files, and build tool integration.'
+description: 'Expert 10x Software engineer specializing in TypeScript with deep knowledge of all popular package management tools including npm, yarn, pnpm, bun, and deno. Use when asked to configure package managers, manage dependencies, set up workspaces, resolve package conflicts, optimize package.json files, troubleshoot installation issues, or work with monorepos. Dependency, installer, and helper-script actions require explicit user approval and diff review before execution.'
 ---
 
 # TypeScript Package Manager Skill
 
-An expert skill for managing TypeScript projects with comprehensive knowledge of modern package management tools and ecosystem best practices.
+An expert skill for managing TypeScript projects with comprehensive knowledge of modern package management tools and ecosystem best practices. The skill defaults to read-only guidance; any action that installs packages, mutates `package.json` or a lockfile, runs a remote installer, or executes a bundled helper script must be proposed first and run only after the user explicitly approves it.
+
+## Safety and Trust Model
+
+- **Inspect before executing.** The bundled helpers under `scripts/` (notably `bun-workflow.js.txt` and `health-check.js.txt`) shell out to local tools via `child_process.execSync`. They ship with a `.js.txt` extension so they are not directly executable; open and read each one, rename it back to `.js` only inside a trusted project working directory you control, and run it only after confirming the exact command.
+- **Verify remote installers.** Any documented one-liner that fetches code from the network (for example `curl -fsSL https://bun.sh/install | bash` or `powershell -c "irm bun.sh/install.ps1 | iex"`) executes whatever the upstream serves at that moment. Confirm the URL, prefer the official downloaded installer or your OS package manager, and pin to a known version when stricter review is required.
+- **Approve dependency changes explicitly.** Treat installs, updates, removals, audits with `--fix`, and lockfile regenerations as mutating actions. Surface the exact command and the expected `package.json` / lockfile diff first, then proceed only after the user confirms.
+- **Provenance disclosure.** The helper scripts in this skill are local to this repository and are not currently published with an upstream source or homepage in the registry metadata. Treat them as untrusted code until you have read them, and prefer skills with clear provenance when execution is involved.
 
 ## When to Use This Skill
 
@@ -56,11 +63,13 @@ This skill provides deep knowledge across all major JavaScript/TypeScript packag
 
 ### Dependency Management
 
-- Installing, updating, and removing dependencies
+All of the following are mutating operations: propose the exact command, show the expected `package.json` and lockfile diff, and execute only after explicit user approval.
+
+- Installing, updating, and removing dependencies (requires approval and diff review)
 - Managing dev dependencies vs production dependencies
 - Understanding peer dependencies and optional dependencies
 - Resolving version conflicts and compatibility issues
-- Audit and security vulnerability management
+- Audit and security vulnerability management (read-only by default; `--fix` flags require approval)
 - Dependency deduplication and optimization
 
 ### Configuration and Optimization
@@ -292,13 +301,13 @@ See the `references/` folder for detailed documentation:
 
 ## Scripts
 
-See the `scripts/` folder for workflow guides and automation:
+See the `scripts/` folder for workflow guides and automation. The helper sources ship with a `.js.txt` extension so they are inert until a user explicitly renames them to `.js`; they execute local shell commands through `child_process.execSync` (for example `bun-workflow.js.txt` line 45 and `health-check.js.txt` line 47 to detect tool versions). Read each helper before renaming, run it only inside a trusted project directory, and prefer the `.md` walkthroughs when you only need reference material.
 
-- **npm-workflow.md** / **npm-workflow.js** - Complete npm workflow from initialization to publishing
+- **npm-workflow.md** / **npm-workflow.js.txt** - Complete npm workflow from initialization to publishing (rename to `.js` before running with Node)
 - **yarn-workflow.md** - Complete yarn workflow covering Classic (1.x) and Berry (3.x+) versions
 - **pnpm-workflow.md** - Complete pnpm workflow with monorepo and workspace features
-- **bun-workflow.md** / **bun-workflow.js** - Complete bun workflow for ultra-fast package management
-- **health-check.md** / **health-check.js** - Package manager health check and diagnostics scripts
+- **bun-workflow.md** / **bun-workflow.js.txt** - Complete bun workflow for ultra-fast package management (rename to `.js` before running). The documented Bun installer one-liners (`curl … | bash`, `irm … | iex`) fetch and execute remote code; verify the source URL and prefer a pinned, downloaded installer when stricter review is required.
+- **health-check.md** / **health-check.js.txt** - Package manager health check and diagnostics scripts (rename to `.js` before running)
 
 ## Assets
 

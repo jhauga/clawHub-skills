@@ -1,6 +1,6 @@
 ---
 name: quasi-coder
-description: 'Expert 10x engineer skill for interpreting and implementing code from shorthand, quasi-code, and natural language descriptions. Use when collaborators provide incomplete code snippets, pseudo-code, or descriptions with potential typos or incorrect terminology. Excels at translating non-technical or semi-technical descriptions into production-quality code.'
+description: 'Expert 10x engineer skill for interpreting and implementing code from shorthand, quasi-code, and natural language descriptions. Use when collaborators provide incomplete code snippets, pseudo-code, or descriptions with potential typos or incorrect terminology. Excels at translating non-technical or semi-technical descriptions into production-quality code while respecting explicit implementation constraints and target file boundaries.'
 ---
 
 # Quasi-Coder Skill
@@ -73,7 +73,24 @@ Apply these rules when interpreting collaborator descriptions:
 3. **>30% certain** the collaborator made mistakes in their description → Apply expert judgment and make necessary corrections
 4. **Uncertain** about intent or requirements → Ask clarifying questions before implementing
 
-Always prioritize the **goal** over the **method** when the method is clearly suboptimal.
+Prioritize the **goal** when the goal is clearly stated, over the **method** when the method is clearly shorthand, unless the collaborator states non-negotiable implementation choices. When in doubt:
+
+- Honor an explicit request for a literal translation.
+- Propose a route that requires user approval before acting on the goal.
+- Run an isolated, temporary unit test to verify an assumption before locking the solution to any of:
+  - A named approach
+  - A dependency
+  - A file and/or folder boundary
+
+## Implementation Boundaries
+
+Use expert judgment within clearly stated limits:
+
+- If the collaborator specifies non-negotiable requirements such as language, framework, API shape, algorithm, dependency, file target, or output format, follow those constraints exactly.
+- If the collaborator wants a literal or near-literal translation of pseudo-code, preserve the requested structure and only correct syntax errors, obvious defects, or impossible steps.
+- If a requested method appears materially worse than an alternative, explain the trade-off and only deviate when the collaborator has not made that choice mandatory.
+- If requirements conflict, or if the collaborator's non-negotiable choices are unclear, ask clarifying questions before editing files or generating code.
+- When you choose a materially different implementation, call out the deviation and the reason in your final summary so the collaborator can review it quickly.
 
 ## Shorthand Interpretation
 
@@ -106,9 +123,21 @@ Lines starting with `()=>` indicate shorthand that requires interpretation:
 1. **Read the entire shorthand section** to understand the full context
 2. **Identify the goal** - what the collaborator wants to achieve
 3. **Assess technical accuracy** - are there terminology errors or misconceptions?
-4. **Determine best implementation** - use expert knowledge to choose optimal approach
-5. **Replace shorthand lines** with production-quality code
-6. **Apply appropriate syntax** for the target file type
+4. **Check explicit constraints** - identify non-negotiable choices, target files, markers, and requested literal behavior
+5. **Determine best implementation** - use expert knowledge to choose the optimal approach within those constraints
+6. **Replace shorthand lines** with production-quality code
+7. **Apply appropriate syntax** for the target file type
+
+### File Update Boundaries
+
+When shorthand leads to file changes:
+
+- Only edit files explicitly named in the prompt, provided as attachments, or clearly bounded by shorthand markers in the target file.
+- If the target file or edit region is ambiguous, stop and ask for clarification instead of guessing.
+- Keep edits scoped to the marked shorthand region and the smallest necessary adjacent code needed to make the change valid.
+- Review the generated diff after applying edits so the collaborator can inspect what changed.
+- Run focused tests, lint, or other validation for the touched area whenever the environment supports it.
+- Recommend version control or a clean diff review before the collaborator accepts broad or behavior-changing edits.
 
 ### Comment Handling
 
@@ -122,12 +151,13 @@ Lines starting with `()=>` indicate shorthand that requires interpretation:
 2. **Apply Expert Knowledge**: Use computer science principles, design patterns, and industry best practices
 3. **Handle Imperfections Gracefully**: Work with typos, incorrect terminology, and incomplete descriptions without judgment
 4. **Consider Context**: Look at available resources, existing code patterns, and project structure
-5. **Balance Vision with Excellence**: Respect the collaborator's vision while ensuring technical quality
+5. **Balance Vision with Excellence**: Respect the collaborator's vision, explicit constraints, and file boundaries while ensuring technical quality
 6. **Avoid Over-Engineering**: Implement what's needed, not what might be needed
 7. **Use Proper Tools**: Choose the right libraries, frameworks, and methods for the job
 8. **Document When Helpful**: Add comments for complex logic, but keep code self-documenting
 9. **Test Edge Cases**: Add error handling and validation the collaborator may have missed
 10. **Maintain Consistency**: Follow existing code style and patterns in the project
+11. **Validate Before Hand-off**: Inspect the diff and run the narrowest meaningful validation after applying shorthand-driven edits
 
 ## Working with Tools and Reference Files
 
@@ -215,6 +245,9 @@ closeMarker        "${language:comment} end-shorthand"
 - Replace shorthand with functional code, features, comments, documentation, or data
 - Sometimes shorthand requests non-code actions (run commands, create files, fetch data, generate graphics)
 - In all cases, remove the shorthand lines after implementing the request
+- Do not override explicit non-negotiable implementation choices unless the collaborator changes them
+- Do not edit unspecified files or unbounded regions when the target of shorthand is unclear
+- Review the diff and run focused validation after shorthand-driven edits whenever possible
 
 ## Variables and Markers
 
@@ -303,9 +336,11 @@ function validateUserInput(email, password) {
 |-------|----------|
 | **Unclear intent from collaborator** | Ask specific clarifying questions about the goal and expected behavior |
 | **Multiple valid approaches** | Present options with recommendations, explaining trade-offs of each |
+| **Explicit method must be preserved** | Follow the stated approach closely and limit changes to syntax, correctness, and clearly necessary fixes |
 | **Collaborator insists on suboptimal approach** | Implement their approach but respectfully explain trade-offs and alternatives |
 | **Missing context or dependencies** | Read related files, check package.json, review existing patterns in the codebase |
 | **Conflicting requirements** | Clarify priorities with the collaborator before implementing |
+| **Target file or edit region is ambiguous** | Ask for the exact file or marker range before modifying project files |
 | **Shorthand requests non-code actions** | Execute the requested action (run commands, create files, fetch data) and remove shorthand |
 | **Terminology doesn't match available tools** | Research correct terminology and use appropriate libraries/methods |
 | **No markers but clear shorthand intent** | Process as shorthand even without formal markers if intent is clear |
@@ -314,10 +349,13 @@ function validateUserInput(email, password) {
 
 - **Don't leave `()=>` lines in the code** - Always remove shorthand notation
 - **Don't blindly follow incorrect technical descriptions** - Apply expert judgment
+- **Don't ignore explicit constraints** - Non-negotiable requirements override optimization preferences
 - **Don't over-complicate simple requests** - Match complexity to the need
 - **Don't ignore the big picture** - Understand the goal, not just individual lines
 - **Don't be condescending** - Translate and implement respectfully
 - **Don't skip error handling** - Add professional error handling even if not mentioned
+- **Don't modify ambiguous targets** - Confirm the exact file and scope before changing project files
+- **Don't skip validation and diff review** - Check the touched slice before handing work back
 
 ## Advanced Usage
 
@@ -366,4 +404,4 @@ adults = [user for user in users if user.get('age', 0) > 18]
 
 The Quasi-Coder skill enables expert-level interpretation and implementation of code from imperfect descriptions. By assessing collaborator expertise, applying technical knowledge, and maintaining professional standards, you bridge the gap between ideas and production-quality code.
 
-**Remember**: Always remove shorthand lines starting with `()=>` and replace them with functional, production-ready implementations that fulfill the collaborator's intent with expert-level quality.
+**Remember**: Always remove shorthand lines starting with `()=>`, honor explicit constraints and target boundaries, and replace shorthand with functional implementations that are validated before hand-off.
