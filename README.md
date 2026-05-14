@@ -6,7 +6,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 
 ## Skills
 
-### Total: 26
+### Total: 27
 
 | Skill | Description |
 |-------|-------------|
@@ -36,6 +36,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 | [make-skill-template](make-skill-template/SKILL.md) (*repo*) <br> [make-skill-template](https://clawhub.ai/jhauga/make-skill-template) (*on ClawHub*) | Create new Skills for ClawHub from prompts or by duplicating this template. |
 | [finalize-agent-prompt](finalize-agent-prompt/SKILL.md) (*repo*) <br> [finalize-agent-prompt](https://clawhub.ai/jhauga/finalize-agent-prompt) (*on ClawHub*) | Finalize prompt file using the role of an AI agent to polish the prompt for the end user. |
 | [html-css-style-color-guide](html-css-style-color-guide/SKILL.md) (*repo*) <br> [html-css-style-color-guide](https://clawhub.ai/jhauga/html-css-style-color-guide) (*on ClawHub*) | Color usage guidelines and styling rules for HTML and CSS elements to ensure accessible, professional designs. |
+| [rhino3d-scripts](rhino3d-scripts/SKILL.md) (*repo*) <br> [rhino3d-scripts](https://clawhub.ai/jhauga/rhino3d-scripts) (*on ClawHub*) | A skill for running scripts using the CAD program Rhinoceros 3D. |
 
 ## Skill Structure
 
