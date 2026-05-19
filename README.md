@@ -6,7 +6,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 
 ## Skills
 
-### Total: 28
+### Total: 30
 
 | Skill | Description |
 |-------|-------------|
@@ -38,6 +38,8 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 | [html-css-style-color-guide](html-css-style-color-guide/SKILL.md) (*repo*) <br> [html-css-style-color-guide](https://clawhub.ai/jhauga/html-css-style-color-guide) (*on ClawHub*) | Color usage guidelines and styling rules for HTML and CSS elements to ensure accessible, professional designs. |
 | [rhino3d-scripts](rhino3d-scripts/SKILL.md) (*repo*) <br> [rhino3d-scripts](https://clawhub.ai/jhauga/rhino3d-scripts) (*on ClawHub*) | A skill for running scripts using the CAD program Rhinoceros 3D. |
 | [multi-lang-coder](multi-lang-coder/SKILL.md) (*repo*) <br> [multi-lang-coder](https://clawhub.ai/jhauga/multi-lang-coder) (*on ClawHub*) | Converts mixed, pseudo, or multi-language input into idiomatic production code, and selects the right language when none is dictated for a new project. |
+| [graphic-designer](graphic-designer/SKILL.md) (*repo*) <br> [graphic-designer](https://clawhub.ai/jhauga/graphic-designer) (*on ClawHub*) | Apply professional UI/UX visual design judgment to mockups, components, screens, and full interfaces. |
+| [vibe-code](vibe-code/SKILL.md) (*repo*) <br> [vibe-code](https://clawhub.ai/jhauga/vibe-code) (*on ClawHub*) | A standalone discipline for vibe-driven coding. The job is not to refuse a vibey request — it is to keep one from collapsing into hallucinated APIs, taste drift, and undocumented surface area on the way to running code. |
 
 ## Skill Structure
 
