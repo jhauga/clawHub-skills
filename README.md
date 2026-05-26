@@ -6,7 +6,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 
 ## Skills
 
-### Total: 30
+### Total: 31
 
 | Skill | Description |
 |-------|-------------|
@@ -40,6 +40,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 | [multi-lang-coder](multi-lang-coder/SKILL.md) (*repo*) <br> [multi-lang-coder](https://clawhub.ai/jhauga/multi-lang-coder) (*on ClawHub*) | Converts mixed, pseudo, or multi-language input into idiomatic production code, and selects the right language when none is dictated for a new project. |
 | [graphic-designer](graphic-designer/SKILL.md) (*repo*) <br> [graphic-designer](https://clawhub.ai/jhauga/graphic-designer) (*on ClawHub*) | Apply professional UI/UX visual design judgment to mockups, components, screens, and full interfaces. |
 | [vibe-code](vibe-code/SKILL.md) (*repo*) <br> [vibe-code](https://clawhub.ai/jhauga/vibe-code) (*on ClawHub*) | A standalone discipline for vibe-driven coding. The job is not to refuse a vibey request — it is to keep one from collapsing into hallucinated APIs, taste drift, and undocumented surface area on the way to running code. |
+| [exclude-prompt-data](exclude-prompt-data/SKILL.md) (*repo*) <br> [exclude-prompt-data](https://clawhub.ai/jhauga/exclude-prompt-data) (*on ClawHub*) | Write only the resulting content into files. Never echo prompt instructions, rationale, or meta-commentary into documentation, comments, or code being produced from a prompt. |
 
 ## Skill Structure
 
