@@ -17,6 +17,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { sortTable } = require('./sortTable');
 
 // Configuration
 const README_PATH = path.join(__dirname, '..', 'README.md');
@@ -233,6 +234,13 @@ function addSkill(skillName, description) {
     fs.writeFileSync(README_PATH, finalContent, 'utf8');
   } catch (err) {
     throw new SkillError(`Failed to write README.md: ${err.message}`, 'README_WRITE_ERROR');
+  }
+
+  // Sort the Skills table so the newly inserted row lands in its proper place
+  try {
+    sortTable();
+  } catch (err) {
+    throw new SkillError(`Failed to sort Skills table: ${err.message}`, 'SORT_FAILED');
   }
 
   console.log(`✓ Successfully added skill "${skillName}" to README.md`);
