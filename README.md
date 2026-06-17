@@ -6,7 +6,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 
 ## Skills
 
-### Total: 32
+### Total: 33
 
 | Skill | Description |
 |-------|-------------|
@@ -17,6 +17,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 | [convert-plaintext-to-md](convert-plaintext-to-md/SKILL.md) (*repo*) <br> [convert-plaintext-to-md](https://clawhub.ai/jhauga/convert-plaintext-to-md) (*on ClawHub*) | Convert a text-based document to markdown following instructions from prompt. |
 | [create-tldr-page](create-tldr-page/SKILL.md) (*repo*) <br> [create-tldr-page](https://clawhub.ai/jhauga/create-tldr-page) (*on ClawHub*) | Create a tldr page from documentation URLs and command examples, requiring both URL and command name. |
 | [create-web-form](create-web-form/SKILL.md) (*repo*) <br> [create-web-form](https://clawhub.ai/jhauga/create-web-form) (*on ClawHub*) | Create robust, accessible web forms with best practices for HTML structure, CSS styling, JavaScript interactivity, form validation, and server-side processing. |
+| [em-dash](em-dash/SKILL.md) (*repo*) <br> [em-dash](https://clawhub.ai/jhauga/em-dash) (*on ClawHub*) | Skill to not use em or en dashes with knowledge of knowing why not to use em dash. |
 | [exclude-prompt-data](exclude-prompt-data/SKILL.md) (*repo*) <br> [exclude-prompt-data](https://clawhub.ai/jhauga/exclude-prompt-data) (*on ClawHub*) | Write only the resulting content into files. Never echo prompt instructions, rationale, or meta-commentary into documentation, comments, or code being produced from a prompt. |
 | [finalize-agent-prompt](finalize-agent-prompt/SKILL.md) (*repo*) <br> [finalize-agent-prompt](https://clawhub.ai/jhauga/finalize-agent-prompt) (*on ClawHub*) | Finalize prompt file using the role of an AI agent to polish the prompt for the end user. |
 | [fix-broken-links](fix-broken-links/SKILL.md) (*repo*) <br> [fix-broken-links](https://clawhub.ai/jhauga/fix-broken-links) (*on ClawHub*) | fix-broken-links |
