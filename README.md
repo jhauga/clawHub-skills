@@ -6,12 +6,13 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 
 ## Skills
 
-### Total: 33
+### Total: 34
 
 | Skill | Description |
 |-------|-------------|
 | [add-educational-comment](add-educational-comment/SKILL.md) (*repo*) <br> [add-educational-comments](https://clawhub.ai/jhauga/add-educational-comment) (*on ClawHub*) | Skill to comment existing code relative to context specified, defaulting to educational comments. |
 | [adobe-illustrator-scripting](adobe-illustrator-scripting/SKILL.md) (*repo*) <br> [adobe-illustrator-scripting](https://clawhub.ai/jhauga/adobe-illustrator-scripting) (*on ClawHub*) | New skill for working with Adobe Illustrator scripts. |
+| [automate-todo](automate-todo/SKILL.md) (*repo*) <br> [automate-todo](https://clawhub.ai/jhauga/automate-todo) (*on ClawHub*) | Skill that covers automate-todo. |
 | [batch-files](batch-files/SKILL.md) (*repo*) <br> [batch-files](https://clawhub.ai/jhauga/batch-files) (*on ClawHub*) | Skill for creating, editing, and/or working with Windows batch files. |
 | [content-management-systems](content-management-systems/SKILL.md) (*repo*) <br> [content-management-systems](https://clawhub.ai/jhauga/content-management-systems) (*on ClawHub*) | A new skill for working with content management systems. |
 | [convert-plaintext-to-md](convert-plaintext-to-md/SKILL.md) (*repo*) <br> [convert-plaintext-to-md](https://clawhub.ai/jhauga/convert-plaintext-to-md) (*on ClawHub*) | Convert a text-based document to markdown following instructions from prompt. |
