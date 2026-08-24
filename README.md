@@ -6,7 +6,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 
 ## Skills
 
-### Total: 34
+### Total: 35
 
 | Skill | Description |
 |-------|-------------|
@@ -34,6 +34,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 | [multi-lang-coder](multi-lang-coder/SKILL.md) (*repo*) <br> [multi-lang-coder](https://clawhub.ai/jhauga/multi-lang-coder) (*on ClawHub*) | Converts mixed, pseudo, or multi-language input into idiomatic production code, and selects the right language when none is dictated for a new project. |
 | [pdftk-server](pdftk-server/) (*repo*) <br> [pdftk-server](https://clawhub.ai/jhauga/pdftk-server) (*on ClawHub*) | Skill for using the command-line tool `pdftk` for working with PDF files. |
 | [quasi-coder](quasi-coder/SKILL.md) (*repo*) <br> [quasi-coder](https://clawhub.ai/jhauga/quasi-coder) (*on ClawHub*) | Vibe-coding skill for interpreting and implementing code from shorthand, quasi-code, and natural language descriptions while respecting explicit constraints and target file boundaries. |
+| [rhino3d-plugins](rhino3d-plugins/SKILL.md) (*repo*) <br> [rhino3d-plugins](https://clawhub.ai/jhauga/rhino3d-plugins) (*on ClawHub*) | Rhino3D plugin and script development skill using the RhinoCommon SDK. |
 | [rhino3d-scripts](rhino3d-scripts/SKILL.md) (*repo*) <br> [rhino3d-scripts](https://clawhub.ai/jhauga/rhino3d-scripts) (*on ClawHub*) | A skill for running scripts using the CAD program Rhinoceros 3D. |
 | [shuffle-json-data](shuffle-json-data/SKILL.md) (*repo*) <br> [shuffle-json-data](https://clawhub.ai/jhauga/shuffle-json-data) (*on ClawHub*) | Shuffle repetitive JSON objects safely by validating schema consistency before randomising entries. |
 | [tldr-prompt](tldr-prompt/SKILL.md) (*repo*) <br> [tldr-prompt](https://clawhub.ai/jhauga/tldr-prompt) (*on ClawHub*) | Create tldr-like summaries for ClawHub tools from URLs and queries. |
