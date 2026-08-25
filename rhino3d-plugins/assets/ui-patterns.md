@@ -86,10 +86,9 @@ namespace MyPlugin.Views
     /// <summary>Everything else keys off this.</summary>
     public static System.Guid PanelId => typeof(MyPanel).GUID;
 
-    /// <summary>
-    /// Rhino constructs this reflectively. The constructor signature must be
-    /// EITHER parameterless OR exactly (uint documentSerialNumber).
-    /// Anything else and the panel silently fails to appear.
+    /// Rhino constructs this reflectively. Supported constructor signatures include
+    /// parameterless, (uint documentSerialNumber), (RhinoDoc), and
+    /// (Guid runtimeId, RhinoDoc). This example uses the serial-number form.
     /// </summary>
     public MyPanel(uint documentSerialNumber)
     {
@@ -144,7 +143,7 @@ constructor works — commands are constructed once when the plugin loads.
 ```csharp
 // In PlugIn.OnLoad, or in the command's constructor:
 Panels.RegisterPanel(
-  PlugIn,                       // the owning plug-in instance
+  MyPluginPlugin.Instance,       // the owning plug-in instance
   typeof(Views.MyPanel),        // the panel type
   "My Panel",                   // caption on the tab
   Properties.Resources.MyPanelIcon);
@@ -182,8 +181,8 @@ if (null == option) return Result.Nothing;
 ### Rules that are easy to get wrong
 
 - The panel class **must** carry a `[Guid]` attribute — that GUID *is* the panel id.
-- The constructor must be parameterless or `(uint documentSerialNumber)`. Rhino constructs it
-  reflectively; any other signature fails silently.
+- The constructor must be parameterless, `(uint documentSerialNumber)`, `(RhinoDoc)`, or
+  `(Guid runtimeId, RhinoDoc)`. Rhino constructs it reflectively; other signatures fail silently.
 - `RegisterPanel` must run before `OpenPanel`.
 - A panel that selects objects has to handle the ones that cannot be selected. `Objects.Select`
   is a no-op on a locked or hidden object and returns without complaint, so a row click appears
@@ -289,9 +288,7 @@ protected override Result RunCommand(RhinoDoc doc, RunMode mode)
   }
 
   var dialog = new Views.MyModalDialog();
-  Eto.Forms.DialogResult rc = dialog.ShowModal(RhinoEtoApp.MainWindow);
-  // Better, especially on Mac:
-  //   dialog.ShowModal(RhinoEtoApp.MainWindowForDocument(doc));
+  Eto.Forms.DialogResult rc = dialog.ShowModal(RhinoEtoApp.MainWindowForDocument(doc));
 
   return rc == Eto.Forms.DialogResult.Ok ? Result.Success : Result.Cancel;
 }
@@ -326,8 +323,8 @@ how you show it:
 
 ```csharp
 // Hold the reference somewhere (a static or plug-in field) so it is not
-// garbage-collected, and ALWAYS set Owner — without it the form goes behind
-// Rhino on Mac.
+// garbage-collected. This pattern is Windows-only; always set Owner so the form stays
+// associated with Rhino. Use a Panel for modeless UI on Mac.
 Form = new Views.MyModelessForm { Owner = RhinoEtoApp.MainWindow };
 Form.Show();
 ```
@@ -381,9 +378,16 @@ public class MyPluginPlugin : Rhino.PlugIns.PlugIn
     pages.Add(new Views.MyOptionsPage());
   }
 
-  /// <summary>Per-document Document Properties (settings that travel in the .3dm).</summary>
+  /// <summary>
+  /// Per-document Document Properties (settings that travel in the .3dm).
+  /// Do NOT reuse MyOptionsPage here -- it persists through the global
+  /// PlugIn.Settings, so the "per-document" page would silently edit user
+  /// preferences instead. Register a separate document-aware page that takes
+  /// the supplied doc (or its serial number) and persists through document
+  /// user data -- see rule 7 and "Which list to register in" below.
+  /// </summary>
   protected override void DocumentPropertiesDialogPages(RhinoDoc doc, List<OptionsDialogPage> pages)
-    => pages.Add(new Views.MyOptionsPage());
+    => pages.Add(new Views.MyDocPropertiesPage(doc.RuntimeSerialNumber));
 
   /// <summary>Object Properties panel pages, for completeness.</summary>
   protected override void ObjectPropertiesPages(ObjectPropertiesPageCollection collection)
@@ -721,9 +725,11 @@ internal class MyDropTarget : RhinoDropTarget
 ### Wiring both up in `OnLoad`
 
 ```csharp
+private MyDropTarget m_drop_target = null!;
+
 protected override LoadReturnCode OnLoad(ref string errorMessage)
 {
-  DropTarget = new MyDropTarget();
+  m_drop_target = new MyDropTarget();
 
   Panels.RegisterPanel(this, typeof(MyDragPanel), "My Panel", null);
 
@@ -794,7 +800,6 @@ namespace MyPluginGh.Components
       pManager.AddPlaneParameter ("Plane",  "P", "Rectangle base plane",     GH_ParamAccess.item, Plane.WorldXY);
       pManager.AddNumberParameter("X Size", "X", "Size in plane X direction", GH_ParamAccess.item, 1.0);
       pManager.AddNumberParameter("Y Size", "Y", "Size in plane Y direction", GH_ParamAccess.item, 1.0);
-      pManager.AddNumberParameter("Radius", "R", "Corner fillet radius",      GH_ParamAccess.item, 0.0);
     }
 
     protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -808,20 +813,20 @@ namespace MyPluginGh.Components
       var plane = Plane.Unset;
       var x = RhinoMath.UnsetValue;
       var y = RhinoMath.UnsetValue;
-      var r = RhinoMath.UnsetValue;
 
       // GetData returns false when the input is missing -> bail out quietly.
       if (!DA.GetData(0, ref plane)) return;
       if (!DA.GetData(1, ref x)) return;
       if (!DA.GetData(2, ref y)) return;
-      if (!DA.GetData(3, ref r)) return;
 
-      if (!plane.IsValid || !RhinoMath.IsValidDouble(x)) return;
+      if (!plane.IsValid ||
+          !RhinoMath.IsValidDouble(x) ||
+          !RhinoMath.IsValidDouble(y)) return;
 
       if (Math.Abs(x) < 1e-12 || Math.Abs(y) < 1e-12)
       {
         // Warning / Error / Remark — this is how a component talks to the user.
-        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Rectangle diagonal cannot be zero length.");
+        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Rectangle dimensions cannot be zero.");
         return;
       }
 

@@ -48,11 +48,12 @@ GUIDs are load-bearing in at least five distinct roles, and each needs its own f
 How to generate one:
 
 ```bash
-# .NET (any platform)
-dotnet run --project - <<< 'System.Console.WriteLine(System.Guid.NewGuid());'   # or:
-uuidgen                       # macOS / Linux
-powershell -c "[guid]::NewGuid()"   # Windows
+# Cross-platform when Python 3 is available
 python3 -c "import uuid; print(uuid.uuid4())"
+# macOS / Linux
+uuidgen
+# Windows
+powershell -c "[guid]::NewGuid()"
 ```
 
 Visual Studio's *Tools > Create GUID* and Rider's `Guid` live template do the same thing.
@@ -453,16 +454,37 @@ No `<OutputPath>` here either, for the reason given in §4a.
 
 **Component icons.** Most shipped components have them, so this is the usual first addition rather
 than a rare one — but a component whose `Icon` override returns null needs none of it. Icons are
-24×24 PNGs embedded through a `.resx`, which on .NET 7+ means the property *and* the package from
-§4b, plus the files themselves:
+24×24 PNGs embedded through a `Properties/Resources.resx`, which on .NET 7+ means the property
+*and* the package from §4b, plus the `.resx` pair below. The `Properties.Resources.MyPluginGh_24x24`
+and `Properties.Resources.MyRectangle_24x24` accessors the component code reads are **generated from
+that `.resx`**; a bare `<None Include="....png" />` item neither embeds the PNGs nor generates
+anything, and the code will not compile.
+
+In the IDE: add `Properties/Resources.resx`, open it, and drag the PNGs in as image resources. The
+IDE generates `Resources.Designer.cs` (one `static Bitmap` property per image, named after the
+resource) and writes this pair into the `.csproj`:
 
 ```xml
   <ItemGroup>
-    <!-- 24x24 PNG icons, one per component plus one for the library -->
-    <None Include="Resources\MyPluginGh_24x24.png" />
-    <None Include="Resources\MyComponent_24x24.png" />
+    <!-- The .resx embeds the 24x24 PNGs; the generated designer exposes them
+         as Properties.Resources.MyPluginGh_24x24 / MyRectangle_24x24. In an
+         SDK-style project the .resx is already an EmbeddedResource, so these
+         are Update items wiring up the generator, not Include items. -->
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 ```
+
+The PNG files themselves live wherever the `.resx` references them (a `Resources/` folder next to
+the project file is conventional) and need no `.csproj` item of their own; the `.resx` carries them
+into the assembly.
 
 **Warning noise.** `NETSDK1086` ("FrameworkReference included but not used") is common in `.gha`
 projects, and `NU1701` appears once a `net48` leg exists. Silence them when you see them:
@@ -556,11 +578,7 @@ using System.Runtime.InteropServices;
 // the assembly's metadata comes from — the MSBuild <Version>/<Title>/<Company>
 // properties are inert. yak spec reads the compiled assembly, so anything you leave
 // out here comes back as a blank in manifest.yml.
-[assembly: AssemblyTitle("MyPlugin")]
-[assembly: AssemblyDescription("What MyPlugin does, in one sentence.")]
-[assembly: AssemblyCompany("My Company")]
-[assembly: AssemblyProduct("MyPlugin")]
-[assembly: AssemblyCopyright("Copyright © 2026, My Company")]
+// Assembly metadata is declared above; do not duplicate those attributes here.
 
 // yak spec reads AssemblyInformationalVersion first, then AssemblyVersion.
 [assembly: AssemblyVersion("1.0.0.0")]
@@ -890,7 +908,7 @@ such uncertainty.)
 
 ```bash
 # 0. Set YAK once so the commands below are readable.
-#    Windows:  set YAK="C:\Program Files\Rhino 8\System\Yak.exe"
+#    Windows (Git Bash): YAK="/c/Program Files/Rhino 8/System/Yak.exe"
 #    macOS:    YAK="/Applications/Rhino 8.app/Contents/Resources/bin/yak"
 
 # 1. Build every target, Release configuration.
@@ -900,14 +918,14 @@ dotnet build -c Release
 #     level of dist/. Paths below are the SDK default layout §4a relies on —
 #     bin/<Configuration>/<tfm>/ — so Release here is genuinely the Release build.
 mkdir -p dist
-cp bin/Release/net8.0/MyPlugin.rhp dist/
+cp -R bin/Release/net8.0/. dist/
 cp icon.png dist/
 
 # 2b. Multi-target instead: a net8.0 leg for Rhino 8.20+ and a net48 leg for
 #     users still running Rhino 8 in .NET Framework mode, one folder each.
 mkdir -p dist/net48 dist/net8.0
-cp bin/Release/net48/MyPlugin.rhp  dist/net48/
-cp bin/Release/net8.0/MyPlugin.rhp dist/net8.0/
+cp -R bin/Release/net48/. dist/net48/
+cp -R bin/Release/net8.0/. dist/net8.0/
 cp icon.png dist/net48/ && cp icon.png dist/net8.0/
 
 # 3. Generate the manifest ONCE, then keep it in source control and edit by hand.

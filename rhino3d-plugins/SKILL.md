@@ -408,7 +408,7 @@ for (;;)
     go.EnablePreSelect(false, true);              // or the next call returns GetResult.Object
     continue;
   }
-  if (res != GetResult.Object) return Result.Cancel;
+  if (res != GetResult.Object) return go.CommandResult();
 
   if (go.ObjectsWerePreselected)
   {
@@ -456,18 +456,18 @@ clipped out of frame. For preview that only needs to last the length of one pick
 
 **Tabbed panels** have a registration contract that fails silently when broken. The panel
 class must be **public** and carry a `[Guid]` attribute, which *is* the panel id. Rhino
-constructs it reflectively, looking for a constructor that takes — in this order of
-preference — a `RhinoDoc`, a `uint documentSerialNumber`, or no arguments.
+constructs it reflectively, preferring — in this order — `(Guid runtimeId, RhinoDoc)`,
+a `RhinoDoc`, a `uint documentSerialNumber`, or no arguments.
 `Panels.RegisterPanel(plugIn, type, caption, icon)` must run before `Panels.OpenPanel`; the
 command constructor or `PlugIn.OnLoad` are both fine places for it. Inside a docked panel use
 `Rhino.UI.Dialogs.ShowMessage`, not `Eto.Forms.MessageBox`: a panel is a child of a Rhino
 container and has no top-level Eto window, which breaks the Eto message box on Mac.
 
-**Dialogs.** `Dialog<T>` with `ShowModal(RhinoEtoApp.MainWindowForDocument(doc))` for modal;
-`ShowSemiModal` when the user still needs to pick in the viewport; a modeless `Form` needs
-`Owner` set or it disappears behind Rhino on Mac. Prefer `MainWindowForDocument(doc)` over
-`MainWindow` — on Mac, multiple documents mean multiple main windows. (Most published samples
-still use `MainWindow`; the per-document form is what the current Eto guide recommends.)
+**Dialogs.** Use `Dialog<T>` with `ShowModal(RhinoEtoApp.MainWindowForDocument(doc))` for modal, and
+`ShowSemiModal` when the user still needs to pick in the viewport. Modeless Eto `Form`s are not
+currently supported on Mac, so use a Panel for cross-platform modeless UI; on Windows, set the
+form's `Owner`. Prefer `MainWindowForDocument(doc)` over `MainWindow`, especially on Mac with
+multiple documents.
 
 **Options pages** register through `PlugIn.OptionsDialogPages()` (application preferences) or
 `PlugIn.DocumentPropertiesDialogPages()` (settings that belong to this `.3dm`). The lifecycle
