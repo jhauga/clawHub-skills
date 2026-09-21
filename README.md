@@ -6,7 +6,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 
 ## Skills
 
-### Total: 35
+### Total: 36
 
 | Skill | Description |
 |-------|-------------|
@@ -29,6 +29,7 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 | [html-css-style-color-guide](html-css-style-color-guide/SKILL.md) (*repo*) <br> [html-css-style-color-guide](https://clawhub.ai/jhauga/html-css-style-color-guide) (*on ClawHub*) | Color usage guidelines and styling rules for HTML and CSS elements to ensure accessible, professional designs. |
 | [html-designer](html-designer/SKILL.md) (*repo*) <br> [html-designer](https://clawhub.ai/jhauga/html-designer) (*on ClawHub*) | Skill that covers html-designer. |
 | [legacy-circuit-mockups](legacy-circuit-mockups/SKILL.md) (*repo*) <br> [legacy-circuit-mockups](https://clawhub.ai/jhauga/legacy-circuit-mockups) (*on ClawHub*) | A skill for creating breadboard circuit mockups and visual diagrams for retro computing and electronics projects. |
+| [make-blog-post](make-blog-post/SKILL.md) (*repo*) <br> [make-blog-post](https://clawhub.ai/jhauga/make-blog-post) (*on ClawHub*) | Write up independently reusable code as an informational blog post walkthrough covering one specific purpose, with destination inference, delivery modes, SEO levels, and confirmation gates before writing or publishing. |
 | [make-skill-template](make-skill-template/SKILL.md) (*repo*) <br> [make-skill-template](https://clawhub.ai/jhauga/make-skill-template) (*on ClawHub*) | Create new Skills for ClawHub from prompts or by duplicating this template. |
 | [markdown-to-html-converter](markdown-to-html-converter/SKILL.md) (*repo*) <br> [markdown-to-html-converter](https://clawhub.ai/jhauga/markdown-to-html-converter) (*on ClawHub*) | Expert skill for converting Markdown documents to HTML using the marked.js library, or writing data conversion scripts. |
 | [multi-lang-coder](multi-lang-coder/SKILL.md) (*repo*) <br> [multi-lang-coder](https://clawhub.ai/jhauga/multi-lang-coder) (*on ClawHub*) | Converts mixed, pseudo, or multi-language input into idiomatic production code, and selects the right language when none is dictated for a new project. |
