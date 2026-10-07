@@ -13,11 +13,14 @@
  * Requirements:
  *   - A folder with the skill name must exist in the workspace root
  *   - A row with the skill name must NOT already exist in the README.md table
+ *
+ * After inserting the row, the table is re-sorted and its letter anchors and
+ * anchor nav are refreshed (see sortTable.js).
  */
 
 const fs = require('fs');
 const path = require('path');
-const { sortTable } = require('./sortTable');
+const { sortTable, sortSkillsTable, ANCHOR_PATTERN } = require('./sortTable');
 
 // Configuration
 const README_PATH = path.join(__dirname, '..', 'README.md');
@@ -58,8 +61,8 @@ function folderExists(folderName) {
  * @returns {boolean}
  */
 function skillRowExists(skillName, readmeContent) {
-  // Match skill name in table row format: [skillName](skillName/
-  const pattern = new RegExp(`\\|\\s*\\[${escapeRegExp(skillName)}\\]\\(${escapeRegExp(skillName)}/`, 'i');
+  // Match skill name in table row format: [skillName](skillName/, with or without a letter anchor
+  const pattern = new RegExp(`\\|\\s*(?:${ANCHOR_PATTERN})?\\[${escapeRegExp(skillName)}\\]\\(${escapeRegExp(skillName)}/`, 'i');
   return pattern.test(readmeContent);
 }
 
@@ -260,9 +263,9 @@ function removeSkillRow(skillName) {
     throw new SkillError(`Failed to read README.md: ${err.message}`, 'README_READ_ERROR');
   }
 
-  // Build the exact row pattern to remove
+  // Build the exact row pattern to remove, with or without a letter anchor
   const rowPattern = new RegExp(
-    `\\| \\[${escapeRegExp(skillName)}\\]\\(${escapeRegExp(skillName)}/SKILL\\.md\\) \\(\\*repo\\*\\) <br> \\[${escapeRegExp(skillName)}\\]\\(https://clawhub\\.ai/jhauga/${escapeRegExp(skillName)}\\) \\(\\*on ClawHub\\*\\) \\| [^|]+ \\|\\n?`,
+    `\\| (?:${ANCHOR_PATTERN})?\\[${escapeRegExp(skillName)}\\]\\(${escapeRegExp(skillName)}/SKILL\\.md\\) \\(\\*repo\\*\\) <br> \\[${escapeRegExp(skillName)}\\]\\(https://clawhub\\.ai/jhauga/${escapeRegExp(skillName)}\\) \\(\\*on ClawHub\\*\\) \\| [^|]+ \\|\\n?`,
     'g'
   );
 
@@ -271,8 +274,12 @@ function removeSkillRow(skillName) {
   // Clean up any duplicate empty lines that might result
   const cleanedContent = updatedContent.replace(/\n{3,}/g, '\n\n');
 
+  // Move or drop the removed row's letter anchor, then refresh the total
+  const sortedContent = sortSkillsTable(cleanedContent);
+  const finalContent = updateTotalCount(sortedContent, countSkillRows(sortedContent));
+
   try {
-    fs.writeFileSync(README_PATH, cleanedContent, 'utf8');
+    fs.writeFileSync(README_PATH, finalContent, 'utf8');
   } catch (err) {
     throw new SkillError(`Failed to write README.md: ${err.message}`, 'README_WRITE_ERROR');
   }
@@ -307,6 +314,14 @@ function runTest() {
 
   console.log('Starting newSkill.js self-test...\n');
 
+  // README.md should match its sorted, anchored, and counted form once cleanup finishes
+  const originalReadme = fs.readFileSync(README_PATH, 'utf8');
+  const sortedOriginal = sortSkillsTable(originalReadme);
+  const expectedReadme = updateTotalCount(sortedOriginal, countSkillRows(sortedOriginal));
+  const anchorId = TEST_SKILL_NAME.charAt(0);
+  const anchorTag = `<span id="${anchorId}"></span>`;
+  const navLink = `[${anchorId.toUpperCase()}](#${anchorId})`;
+
   try {
     // Step 1: Create temporary test folder
     console.log(`[1/6] Creating temporary test folder "${TEST_SKILL_NAME}"...`);
@@ -325,12 +340,18 @@ function runTest() {
     // Step 3: Verify the row was added to README.md
     console.log('[3/6] Verifying skill row exists in README.md...');
     const readmeContent = fs.readFileSync(README_PATH, 'utf8');
-    const expectedRowFragment = `| [${TEST_SKILL_NAME}](${TEST_SKILL_NAME}/SKILL.md) (*repo*) <br> [${TEST_SKILL_NAME}](https://clawhub.ai/jhauga/${TEST_SKILL_NAME}) (*on ClawHub*) | ${TEST_DESCRIPTION} |`;
-    
+    const expectedRowFragment = `[${TEST_SKILL_NAME}](${TEST_SKILL_NAME}/SKILL.md) (*repo*) <br> [${TEST_SKILL_NAME}](https://clawhub.ai/jhauga/${TEST_SKILL_NAME}) (*on ClawHub*) | ${TEST_DESCRIPTION} |`;
+
     if (!readmeContent.includes(expectedRowFragment)) {
       throw new SkillError('Verification failed: skill row not found in README.md', 'VERIFICATION_FAILED');
     }
-    console.log('   ✓ Skill row verified in README.md');
+    if (readmeContent.split(anchorTag).length !== 2) {
+      throw new SkillError(`Verification failed: expected exactly one ${anchorTag} anchor`, 'VERIFICATION_FAILED');
+    }
+    if (!readmeContent.includes(navLink)) {
+      throw new SkillError(`Verification failed: anchor nav is missing ${navLink}`, 'VERIFICATION_FAILED');
+    }
+    console.log('   ✓ Skill row, letter anchor, and anchor nav verified in README.md');
 
     // Step 4: Log pass message
     console.log('[4/6] Test passed: addSkill functionality working correctly');
@@ -345,7 +366,10 @@ function runTest() {
     if (cleanedContent.includes(expectedRowFragment)) {
       throw new SkillError('Cleanup failed: test row still exists in README.md', 'CLEANUP_FAILED');
     }
-    console.log('   ✓ Test row removed from README.md');
+    if (cleanedContent !== expectedReadme) {
+      throw new SkillError('Cleanup failed: README.md anchors, nav, or total differ from the pre-test state', 'CLEANUP_FAILED');
+    }
+    console.log('   ✓ Test row removed and README.md restored to its pre-test state');
 
     // Step 6: Remove the test folder
     console.log('[6/6] Cleaning up: removing temporary test folder...');

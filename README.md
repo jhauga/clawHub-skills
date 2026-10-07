@@ -6,45 +6,48 @@ Each subdirectory contains a self-contained skill with a `SKILL.md` file and opt
 
 ## Skills
 
+| [A](#a) | [B](#b) | [C](#c) | [E](#e) | [F](#f) | [G](#g) | [H](#h) | [L](#l) | [M](#m) | [P](#p) | [Q](#q) | [R](#r) | [S](#s) | [T](#t) | [U](#u) | [V](#v) | [W](#w) |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+
 ### Total: 36
 
 | Skill | Description |
 |-------|-------------|
-| [add-educational-comment](add-educational-comment/SKILL.md) (*repo*) <br> [add-educational-comments](https://clawhub.ai/jhauga/add-educational-comment) (*on ClawHub*) | Skill to comment existing code relative to context specified, defaulting to educational comments. |
+| <span id="a"></span> [add-educational-comment](add-educational-comment/SKILL.md) (*repo*) <br> [add-educational-comments](https://clawhub.ai/jhauga/add-educational-comment) (*on ClawHub*) | Skill to comment existing code relative to context specified, defaulting to educational comments. |
 | [adobe-illustrator-scripting](adobe-illustrator-scripting/SKILL.md) (*repo*) <br> [adobe-illustrator-scripting](https://clawhub.ai/jhauga/adobe-illustrator-scripting) (*on ClawHub*) | New skill for working with Adobe Illustrator scripts. |
 | [automate-todo](automate-todo/SKILL.md) (*repo*) <br> [automate-todo](https://clawhub.ai/jhauga/automate-todo) (*on ClawHub*) | Skill that covers automate-todo. |
-| [batch-files](batch-files/SKILL.md) (*repo*) <br> [batch-files](https://clawhub.ai/jhauga/batch-files) (*on ClawHub*) | Skill for creating, editing, and/or working with Windows batch files. |
-| [content-management-systems](content-management-systems/SKILL.md) (*repo*) <br> [content-management-systems](https://clawhub.ai/jhauga/content-management-systems) (*on ClawHub*) | A new skill for working with content management systems. |
+| <span id="b"></span> [batch-files](batch-files/SKILL.md) (*repo*) <br> [batch-files](https://clawhub.ai/jhauga/batch-files) (*on ClawHub*) | Skill for creating, editing, and/or working with Windows batch files. |
+| <span id="c"></span> [content-management-systems](content-management-systems/SKILL.md) (*repo*) <br> [content-management-systems](https://clawhub.ai/jhauga/content-management-systems) (*on ClawHub*) | A new skill for working with content management systems. |
 | [convert-plaintext-to-md](convert-plaintext-to-md/SKILL.md) (*repo*) <br> [convert-plaintext-to-md](https://clawhub.ai/jhauga/convert-plaintext-to-md) (*on ClawHub*) | Convert a text-based document to markdown following instructions from prompt. |
 | [create-tldr-page](create-tldr-page/SKILL.md) (*repo*) <br> [create-tldr-page](https://clawhub.ai/jhauga/create-tldr-page) (*on ClawHub*) | Create a tldr page from documentation URLs and command examples, requiring both URL and command name. |
 | [create-web-form](create-web-form/SKILL.md) (*repo*) <br> [create-web-form](https://clawhub.ai/jhauga/create-web-form) (*on ClawHub*) | Create robust, accessible web forms with best practices for HTML structure, CSS styling, JavaScript interactivity, form validation, and server-side processing. |
-| [em-dash](em-dash/SKILL.md) (*repo*) <br> [em-dash](https://clawhub.ai/jhauga/em-dash) (*on ClawHub*) | Skill to not use em or en dashes with knowledge of knowing why not to use em dash. |
+| <span id="e"></span> [em-dash](em-dash/SKILL.md) (*repo*) <br> [em-dash](https://clawhub.ai/jhauga/em-dash) (*on ClawHub*) | Skill to not use em or en dashes with knowledge of knowing why not to use em dash. |
 | [exclude-prompt-data](exclude-prompt-data/SKILL.md) (*repo*) <br> [exclude-prompt-data](https://clawhub.ai/jhauga/exclude-prompt-data) (*on ClawHub*) | Write only the resulting content into files. Never echo prompt instructions, rationale, or meta-commentary into documentation, comments, or code being produced from a prompt. |
-| [finalize-agent-prompt](finalize-agent-prompt/SKILL.md) (*repo*) <br> [finalize-agent-prompt](https://clawhub.ai/jhauga/finalize-agent-prompt) (*on ClawHub*) | Finalize prompt file using the role of an AI agent to polish the prompt for the end user. |
+| <span id="f"></span> [finalize-agent-prompt](finalize-agent-prompt/SKILL.md) (*repo*) <br> [finalize-agent-prompt](https://clawhub.ai/jhauga/finalize-agent-prompt) (*on ClawHub*) | Finalize prompt file using the role of an AI agent to polish the prompt for the end user. |
 | [fix-broken-links](fix-broken-links/SKILL.md) (*repo*) <br> [fix-broken-links](https://clawhub.ai/jhauga/fix-broken-links) (*on ClawHub*) | fix-broken-links |
 | [freecad-scripts](freecad-scripts/SKILL.md) (*repo*) <br> [freecad-scripts](https://clawhub.ai/jhauga/freecad-scripts) (*on ClawHub*) | Skill that covers freecad-scripts. |
-| [game-engine](game-engine/SKILL.md) (*repo*) <br> [game-engine](https://clawhub.ai/jhauga/game-engine) (*on ClawHub*) | Skill for creating and/or working on a game engine. |
+| <span id="g"></span> [game-engine](game-engine/SKILL.md) (*repo*) <br> [game-engine](https://clawhub.ai/jhauga/game-engine) (*on ClawHub*) | Skill for creating and/or working on a game engine. |
 | [graphic-designer](graphic-designer/SKILL.md) (*repo*) <br> [graphic-designer](https://clawhub.ai/jhauga/graphic-designer) (*on ClawHub*) | Apply professional UI/UX visual design judgment to mockups, components, screens, and full interfaces. |
-| [html-coder](html-coder/SKILL.md) (*repo*) <br> [html-coder](https://clawhub.ai/jhauga/html-coder) (*on ClawHub*) | Skill that covers html-coder. |
+| <span id="h"></span> [html-coder](html-coder/SKILL.md) (*repo*) <br> [html-coder](https://clawhub.ai/jhauga/html-coder) (*on ClawHub*) | Skill that covers html-coder. |
 | [html-css-style-color-guide](html-css-style-color-guide/SKILL.md) (*repo*) <br> [html-css-style-color-guide](https://clawhub.ai/jhauga/html-css-style-color-guide) (*on ClawHub*) | Color usage guidelines and styling rules for HTML and CSS elements to ensure accessible, professional designs. |
 | [html-designer](html-designer/SKILL.md) (*repo*) <br> [html-designer](https://clawhub.ai/jhauga/html-designer) (*on ClawHub*) | Skill that covers html-designer. |
-| [legacy-circuit-mockups](legacy-circuit-mockups/SKILL.md) (*repo*) <br> [legacy-circuit-mockups](https://clawhub.ai/jhauga/legacy-circuit-mockups) (*on ClawHub*) | A skill for creating breadboard circuit mockups and visual diagrams for retro computing and electronics projects. |
-| [make-blog-post](make-blog-post/SKILL.md) (*repo*) <br> [make-blog-post](https://clawhub.ai/jhauga/make-blog-post) (*on ClawHub*) | Write up independently reusable code as an informational blog post walkthrough covering one specific purpose, with destination inference, delivery modes, SEO levels, and confirmation gates before writing or publishing. |
+| <span id="l"></span> [legacy-circuit-mockups](legacy-circuit-mockups/SKILL.md) (*repo*) <br> [legacy-circuit-mockups](https://clawhub.ai/jhauga/legacy-circuit-mockups) (*on ClawHub*) | A skill for creating breadboard circuit mockups and visual diagrams for retro computing and electronics projects. |
+| <span id="m"></span> [make-blog-post](make-blog-post/SKILL.md) (*repo*) <br> [make-blog-post](https://clawhub.ai/jhauga/make-blog-post) (*on ClawHub*) | Write up independently reusable code as an informational blog post walkthrough covering one specific purpose, with destination inference, delivery modes, SEO levels, and confirmation gates before writing or publishing. |
 | [make-skill-template](make-skill-template/SKILL.md) (*repo*) <br> [make-skill-template](https://clawhub.ai/jhauga/make-skill-template) (*on ClawHub*) | Create new Skills for ClawHub from prompts or by duplicating this template. |
 | [markdown-to-html-converter](markdown-to-html-converter/SKILL.md) (*repo*) <br> [markdown-to-html-converter](https://clawhub.ai/jhauga/markdown-to-html-converter) (*on ClawHub*) | Expert skill for converting Markdown documents to HTML using the marked.js library, or writing data conversion scripts. |
 | [multi-lang-coder](multi-lang-coder/SKILL.md) (*repo*) <br> [multi-lang-coder](https://clawhub.ai/jhauga/multi-lang-coder) (*on ClawHub*) | Converts mixed, pseudo, or multi-language input into idiomatic production code, and selects the right language when none is dictated for a new project. |
-| [pdftk-server](pdftk-server/) (*repo*) <br> [pdftk-server](https://clawhub.ai/jhauga/pdftk-server) (*on ClawHub*) | Skill for using the command-line tool `pdftk` for working with PDF files. |
-| [quasi-coder](quasi-coder/SKILL.md) (*repo*) <br> [quasi-coder](https://clawhub.ai/jhauga/quasi-coder) (*on ClawHub*) | Vibe-coding skill for interpreting and implementing code from shorthand, quasi-code, and natural language descriptions while respecting explicit constraints and target file boundaries. |
-| [rhino3d-plugins](rhino3d-plugins/SKILL.md) (*repo*) <br> [rhino3d-plugins](https://clawhub.ai/jhauga/rhino3d-plugins) (*on ClawHub*) | Rhino3D plugin and script development skill using the RhinoCommon SDK. |
+| <span id="p"></span> [pdftk-server](pdftk-server/) (*repo*) <br> [pdftk-server](https://clawhub.ai/jhauga/pdftk-server) (*on ClawHub*) | Skill for using the command-line tool `pdftk` for working with PDF files. |
+| <span id="q"></span> [quasi-coder](quasi-coder/SKILL.md) (*repo*) <br> [quasi-coder](https://clawhub.ai/jhauga/quasi-coder) (*on ClawHub*) | Vibe-coding skill for interpreting and implementing code from shorthand, quasi-code, and natural language descriptions while respecting explicit constraints and target file boundaries. |
+| <span id="r"></span> [rhino3d-plugins](rhino3d-plugins/SKILL.md) (*repo*) <br> [rhino3d-plugins](https://clawhub.ai/jhauga/rhino3d-plugins) (*on ClawHub*) | Rhino3D plugin and script development skill using the RhinoCommon SDK. |
 | [rhino3d-scripts](rhino3d-scripts/SKILL.md) (*repo*) <br> [rhino3d-scripts](https://clawhub.ai/jhauga/rhino3d-scripts) (*on ClawHub*) | A skill for running scripts using the CAD program Rhinoceros 3D. |
-| [shuffle-json-data](shuffle-json-data/SKILL.md) (*repo*) <br> [shuffle-json-data](https://clawhub.ai/jhauga/shuffle-json-data) (*on ClawHub*) | Shuffle repetitive JSON objects safely by validating schema consistency before randomising entries. |
-| [tldr-prompt](tldr-prompt/SKILL.md) (*repo*) <br> [tldr-prompt](https://clawhub.ai/jhauga/tldr-prompt) (*on ClawHub*) | Create tldr-like summaries for ClawHub tools from URLs and queries. |
+| <span id="s"></span> [shuffle-json-data](shuffle-json-data/SKILL.md) (*repo*) <br> [shuffle-json-data](https://clawhub.ai/jhauga/shuffle-json-data) (*on ClawHub*) | Shuffle repetitive JSON objects safely by validating schema consistency before randomising entries. |
+| <span id="t"></span> [tldr-prompt](tldr-prompt/SKILL.md) (*repo*) <br> [tldr-prompt](https://clawhub.ai/jhauga/tldr-prompt) (*on ClawHub*) | Create tldr-like summaries for ClawHub tools from URLs and queries. |
 | [typescript-coder](typescript-coder/SKILL.md) (*repo*) <br> [typescript-coder](https://clawhub.ai/jhauga/typescript-coder) (*on ClawHub*) | Skill that covers core TypeScript concepts for TypeScript programming. |
 | [typescript-package-manager](typescript-package-manager/SKILL.md) (*repo*) <br> [typescript-package-manager](https://clawhub.ai/jhauga/typescript-package-manager) (*on ClawHub*) | Skill that covers typescript-package-manager. Dependency changes, remote installer commands, and bundled helper scripts require inspection and explicit user approval before execution. |
-| [update-docs-on-code-change](update-docs-on-code-change/SKILL.md) (*repo*) <br> [update-docs-on-code-change](https://clawhub.ai/jhauga/update-docs-on-code-change) (*on ClawHub*) | Skill that keeps documentation up-to-date when features change. |
+| <span id="u"></span> [update-docs-on-code-change](update-docs-on-code-change/SKILL.md) (*repo*) <br> [update-docs-on-code-change](https://clawhub.ai/jhauga/update-docs-on-code-change) (*on ClawHub*) | Skill that keeps documentation up-to-date when features change. |
 | [use-cliche-data-in-docs](use-cliche-data-in-docs/SKILL.md) (*repo*) <br> [use-cliche-data-in-docs](https://clawhub.ai/jhauga/use-cliche-data-in-docs) (*on ClawHub*) | Skill that instructs agent to use cliche data for documentation. |
-| [vibe-code](vibe-code/SKILL.md) (*repo*) <br> [vibe-code](https://clawhub.ai/jhauga/vibe-code) (*on ClawHub*) | A standalone discipline for vibe-driven coding. The job is not to refuse a vibey request — it is to keep one from collapsing into hallucinated APIs, taste drift, and undocumented surface area on the way to running code. |
-| [web-coder](web-coder/SKILL.md) (*repo*) <br> [web-coder](https://clawhub.ai/jhauga/web-coder) (*on ClawHub*) | Skill that covers core web concepts for general web programming. |
+| <span id="v"></span> [vibe-code](vibe-code/SKILL.md) (*repo*) <br> [vibe-code](https://clawhub.ai/jhauga/vibe-code) (*on ClawHub*) | A standalone discipline for vibe-driven coding. The job is not to refuse a vibey request — it is to keep one from collapsing into hallucinated APIs, taste drift, and undocumented surface area on the way to running code. |
+| <span id="w"></span> [web-coder](web-coder/SKILL.md) (*repo*) <br> [web-coder](https://clawhub.ai/jhauga/web-coder) (*on ClawHub*) | Skill that covers core web concepts for general web programming. |
 | [write-coding-standards-from-file](write-coding-standards-from-file/SKILL.md) (*repo*) <br> [write-coding-standards-from-file](https://clawhub.ai/jhauga/write-coding-standards-from-file) (*on ClawHub*) | Write a coding standards document from selected project files or narrowly scoped folders without modifying analyzed source files unless edits are explicitly requested and confirmed. |
 
 ## Skill Structure
@@ -67,3 +70,5 @@ Every skill follows the standard Agent Skills layout:
 3. Add optional directories (`references/`, `scripts/`, `assets/`, `templates/`) as needed
 4. Update this README with the new skill entry, linking to repo folder and skill on [ClawHub](https://clawhub.ai/)
   - Run `node scripts/newSkill.js <skillName> [description]`
+  - The script sorts the table, moves each letter's `<span id>` anchor to the first skill starting with that letter, and rebuilds the letter nav above the table
+  - After editing the table by hand, run `node scripts/sortTable.js` to do the same

@@ -1,398 +1,158 @@
 ---
 name: make-blog-post
-description: 'Write up independently reusable code as an informational blog post walkthrough covering one specific purpose. Use when writing or touching a function, method, class, script, or tool that works outside the current project, or when asked to "make a blog post", "write a blog post about this", "draft a post", "turn this helper into an article", or "publish this walkthrough". Covers qualification checks, destination inference for blogs, docs sets, and pseudo-blog venues such as gists, delivery modes (direct, staged, paste), credential and cliche sample-data rules, post file layout, SEO optimization, and two confirmation gates before writing or publishing.'
-metadata:
-  tags: 'blogging, documentation, seo, content, static-site-generators'
+description: 'Turn code from the current session into a blog post written in the voice of its author. Covers one function, script, class, or tool as a focused walkthrough with a generalized sample and a usage example, learns tone and structure from existing posts or writing samples by the same author, takes the destination from what the user names or the blog repository in use instead of assumed folders, and saves no file until the draft is approved. Use when asked to write, draft, or turn code into a blog post, article, tutorial, or gist, or when invoked as /make-blog-post at the end of a turn.'
+argument-hint: "Optional: code or topic to cover, where the post goes, and links or files of your past posts"
 ---
 
 # Make Blog Post
 
-Turn independently reusable code into an informational blog post that walks a
-reader through one specific purpose. The post is built here; publishing it
-anywhere public always waits on the user.
+Turn code from the current session into a blog post that reads as if its author wrote it: one walkthrough of one function, script, class, or tool, built around a generalized sample and a usage example.
+
+This skill runs only when the user asks for a post. The natural moment is the end of a turn, once the code works: `/make-blog-post`, optionally followed by what to cover, where the post goes, and links or files of the author's past posts.
 
 ## When to Use This Skill
 
-- While working in a workspace or repository, a function, method, class,
-  script, or tool is being written or touched that could work outside this
-  project with little or no modification.
-- The user asks to "make a blog post", "write this up as a post", "draft an
-  article about this helper", or "give me something I can paste into my blog".
-- A helper was just extracted or generalized and is worth a standalone
-  walkthrough.
+- The user asks to write, draft, or turn code into a blog post, article, tutorial, walkthrough, or gist.
+- The user invokes `/make-blog-post`, with or without naming the subject, the destination, or writing samples.
 
-If the code does not qualify (see **Step 1**), do nothing and do not mention
-this skill.
+Do not use it for API reference, READMEs, changelogs, or release notes, or for a post that needs several unrelated examples or a multi-file walkthrough.
 
-## Skill Configuration
+## Examples
 
-These settings control how the rest of the skill is applied. Treat the listed
-value as the default and change it only when the user says otherwise.
-
-| Setting | Default | Meaning |
-|---------|---------|---------|
-| `automation-mode` | `false` | `true` when running inside an unattended or agent-driven flow. `false` when a person is present for the exchange. |
-| `post-store-root` | host OS entry under **Step 3** | The archive root for posts. Resolve the home portion from the environment (`%USERPROFILE%` on Windows, `$HOME` on macOS and Linux) rather than hardcoding it. |
-| `allow-in-workspace-storage` | `true` | When `true`, the post may live inside the current workspace instead of the post store, if the workspace is a fitting home. |
-| `delivery-mode` | `auto` | `auto` picks the mode per **Step 4**. `direct`, `staged`, or `paste` pins one mode. |
-| `seo-optimization` | `auto` | `auto` picks the level per `references/seo-optimization.md`. `full`, `light`, `venue`, or `internal` pins one level. `off` skips SEO entirely. |
-
-Confirmation (**Step 8** and **Step 9**) is not configurable. It applies in
-both modes.
-
-## Step 1: Qualify the Code
-
-The code qualifies only when **all** of these are true:
-
-- It solves one clear, general-purpose problem.
-- It can be demonstrated in a single self-contained example.
-- It does not depend on project-specific state, services, or configuration that
-  cannot be replaced with a stand-in.
-- It is not trivial. A one-line wrapper or a bare standard-library call does
-  not qualify.
-
-If any condition is false, **stay silent**. Do not mention this skill or the
-post workflow at all.
-
-## Step 2: Check for an Existing Post
-
-Before drafting, check the post store (see **Step 3**) for an existing post
-covering the same code. If one exists, skip.
-
-```batch
-dir /s /b "%USERPROFILE%\Documents\blogPosts\*.md"
+```text
+/make-blog-post
+/make-blog-post the retry helper in src/http.ts
+/make-blog-post the slugify function, as a gist
+/make-blog-post put it in the blog, match https://example.com/posts/one and https://example.com/posts/two
 ```
 
-When a pseudo-blog venue is the destination, also check whether an existing
-post on the same code already went out to that venue. If one did, skip.
+## Workflow
 
-## Step 3: Decide Where the Post Belongs
+Work through the steps in order. Nothing is written to disk until the draft is approved in step 5.
 
-### An instruction from the user wins
+### 1. Pick the subject
 
-If the user names a destination, use it. Everything below is inference, and
-inference loses to an instruction.
+- Use what the user named: a function, file, selection, snippet, or topic. Code pasted into the conversation is in scope too.
+- Otherwise, take the code written or changed in this session. When more than one piece qualifies, list up to three, each with a one-line purpose, and ask which one to write up.
+- Check that the subject works as a standalone post. It should:
+  - Solve one clear, general-purpose problem.
+  - Fit in one self-contained example.
+  - Not depend on project-specific state, services, or configuration that cannot be replaced with a stand-in.
+  - Not be trivial. A one-line wrapper or a lone standard-library call does not qualify.
+- When a check fails, say which one and suggest an angle that works, such as the technique behind the code. Proceed with the original subject if the user still wants it.
 
-- **A named path, folder, repository, or venue is the destination.** Do not
-  re-derive it, and do not relocate the post because a different location fits
-  the conventions better.
-- **Echo the resolved destination at Gate 1** as a full path, or as the venue
-  plus file name. A short instruction such as "put it in the blog" is still an
-  instruction: resolve it against the workspace, then show what it resolved to
-  so a wrong reading is caught before anything is written.
-- **Create missing category folders** under a root that already exists. If the
-  named root itself does not exist, stop and ask rather than building a tree
-  that may be a typo.
-- **Say so once if the instruction conflicts** with the site's conventions or
-  with a rule in this skill, then follow the instruction anyway. The exception
-  is **Step 5**, which is not overridable: strip the offending data and say
-  what was stripped.
+### 2. Resolve the destination
 
-### Inferring a destination
+Consider only what the user said, the current workspace, and paths the user provides. Do not assume any folder exists, and do not walk parent or sibling directories looking for one.
 
-When no destination was named, read the working context:
+1. **The user named a destination** (a local path, the current workspace repository, a venue such as a gist, or "just show me"): use it, and do not move the post elsewhere because another place fits conventions better. If the user names another repository, ask for its local checkout path; do not clone or modify it remotely. A partial name such as "the blog" resolves against the current workspace only. If the workspace is not that blog, ask for the path.
+2. **The workspace is a blog or site**: take the posts folder from the generator's own configuration, and match an existing post's folder, extension, file naming, and front matter. See [references/blog-platforms.md](references/blog-platforms.md) for detection and each generator's contract.
+3. **Otherwise**: write no file. Deliver the post in chat and offer to save it to a path the user names.
 
-| Question | What it means |
-|----------|---------------|
-| Is this a repository or a loose folder? | A folder with no version control is scratch work. Its posts go to the post store. |
-| Is the workspace a blog or site? | A posts folder (`_posts/`, `content/posts/`, `src/content/blog/`), a generator config (`_config.yml`, `hugo.toml`, `astro.config.mjs`), or a body of dated articles. The workspace is the natural home. See `references/blog-platforms.md`. |
-| Is a pseudo-blog venue in play? | The user may publish standalone posts somewhere that is not a blog, such as a gist. See `references/pseudo-blog-venues.md`. |
-| Is the workspace a documentation set? | A `docs/` tree or a documentation-only repository. A walkthrough may belong there as a new doc file. |
-| Is the workspace an application or library? | The code lives here but the writing does not. Store the post in the post store and consider only a link back (see **Step 10**). |
-| Does the repository sit in an organization folder? | A repository directly under `GitHub` uses the `blogPosts` / `<category>` form. A repository under `GitHub` / `<organization>` uses the `blogPosts` / `<organization>` / `<category>` form. |
+A default destination or voice profile recorded in the user's custom instructions counts as named by the user. That is the place for a personal workflow, such as a folder where every post is archived.
 
-From that reading, settle two questions and state both answers at Gate 1:
+When writing to a named path:
 
-1. **Does this create a new doc file in the workspace?** Only when the
-   workspace is a blog or documentation set, `allow-in-workspace-storage` is
-   `true`, and the post fits the existing structure. Never create a new
-   documentation area just to hold a post.
-2. **Where is the post stored?** The workspace path, the post store path, both
-   (a workspace copy for publication and a post store copy for the archive), or
-   the post store plus a venue-shaped copy.
+- Create missing subfolders under a root that exists. If the root itself does not exist, ask instead of building a tree that may be a typo.
+- If the path breaks the detected generator's contract (the wrong folder for the collection, a missing date prefix), state in one line what would break, offer the compatible path, and ask which to use.
+- If the request conflicts with the site's conventions, say so once, then follow the request. The security rules and the approval gate still apply.
 
-When the workspace is a blog or site, match its existing posts: same folder,
-same file extension, same front matter fields, same naming convention. The
-layout in **Step 6** is the fallback for the post store, not an override of a
-site's own format.
+### 3. Learn the author's voice
 
-### Post store paths
+A post that reads like generic documentation is not the author's post. Before drafting, collect three to five samples of the author's own writing, from these sources in order:
 
-Determine the host OS first, then use only that OS's forms. Never mix forms
-from two OS blocks in one path.
+1. Samples named in the request: files, folders, URLs, or pasted text.
+2. A saved voice profile the user points to, in the request or in their custom instructions.
+3. When step 2 resolved a blog repository, the most recent posts by this author in its posts folder.
 
-**Windows**:
+When these sources give fewer than three samples, ask once for enough links or files to reach three, unless the user has already said there are no more. Then work with what there is:
 
-```
-C:\Users\<user>\<blogSite>\<category>\
-C:\Users\<user>\Documents\blogPosts\<category>\
-C:\Users\<user>\Documents\blogPosts\<organization>\<category>\
-```
+- **Three or more**: build the full profile.
+- **One or two**: build a thin profile from only the patterns those samples confirm, and offer the three quick questions in the reference to fill the gaps.
+- **None**: offer the three quick questions, or write in a plain, neutral voice.
 
-**macOS**:
+A saved profile counts as the number of samples it records. Say at the plan check which case applies and how many samples the profile rests on. Never present a thin or neutral draft as a full match.
 
-```
-/Users/<user>/<blogSite>/<category>/
-/Users/<user>/Documents/blogPosts/<category>/
-/Users/<user>/Documents/blogPosts/<organization>/<category>/
-```
+Build a short profile with [references/voice-profile.md](references/voice-profile.md): person and address, formality, rhythm, openings, headings, how code is introduced and explained, closings, and mechanics such as spelling and punctuation habits. The samples are evidence of style only. Nothing from their content (sentences, anecdotes, names, links) goes into the new post, and no personal experience is invented to fit a pattern.
 
-**Linux**:
+### 4. Check the plan
 
-```
-/home/<user>/<blogSite>/<category>/
-/home/<user>/Documents/blogPosts/<category>/
-/home/<user>/Documents/blogPosts/<organization>/<category>/
-```
+Before drafting, present these in a few lines and wait for a yes:
 
-`<blogSite>` is a local checkout of a blog or site the user publishes to. Use
-that form only when the post is going into an existing site, and place the file
-where the site keeps its posts rather than at the site root.
+- The subject and the single purpose the post covers.
+- The destination as a full path, with the config file it was resolved from when a generator was involved, or "chat only".
+- The voice source (which samples or profile, and how many samples it rests on) and three to five bullets summarizing it. Call a thin profile or one built from answers a partial match, and a neutral voice no match.
+- The working title, the slug, and the SEO level.
+- Any open question, when there is one, such as the real story behind a personal opening, or an existing post at the destination on the same subject (update it, take a new angle, or stop).
 
-`<category>` is a short, lowercase, hyphenated name for the code's domain, such
-as `string-utils`, `file-io`, `powershell`, or `date-time`. Reuse an existing
-category folder when one fits. Name the post file after what the code does
-(e.g. `slugify-text.md`), not after the project.
+On a decline, stop and write nothing. When the post will be delivered in chat, no file is saved, so skip the extra round trip: put the plan at the top of the reply that carries the draft, and let one approval cover both.
 
-### OS handling
+### 5. Draft and get approval
 
-- **Detect, do not assume.** Read the host OS from the environment before
-  building any path. Drive letters and backslashes are Windows only; a leading
-  `/` is macOS and Linux only.
-- **Separators follow the host.** Use `\` on Windows and `/` on macOS and
-  Linux, in every path this skill writes or reports.
-- **Home directories differ.** Prefer the environment variable
-  (`%USERPROFILE%` or `$HOME`) over a literal home path.
-- **Case sensitivity differs.** Keep category folders and file names lowercase
-  and hyphenated so the same name resolves on every OS.
-- **Line endings.** Write post files with the host's convention, or with `LF`
-  when the target is a site repository that normalizes line endings.
-- **Paths inside the post follow the post, not the host.** A batch or
-  PowerShell sample shows Windows paths; a shell sample shows POSIX paths; a
-  cross-platform sample shows both or an abstract token such as
-  `<config-dir>`.
+Draft the post per **Building the post**, show it in full, and invite edits. Revise and show it again until the user approves. Silence or an ambiguous reply is not approval. Drafting and showing the post in the conversation needs no approval, but nothing is saved to a file, published, committed, or pushed before an explicit yes.
 
-## Step 4: Choose the Delivery Mode
+### 6. Deliver
 
-Where the post belongs and how it reaches the user are separate questions.
-Settle this before Gate 1, because it decides whether a file is written at all.
+- **File**: write to the confirmed path in the site's format, using the host's path separators and the repository's line endings. Name a standalone file after the slug (`slugify-text.md`), which describes what the code does, not the project. Approval was the gate, so write the post ready to publish. If the user asks for a draft instead, use the platform's draft mechanism (see [references/blog-platforms.md](references/blog-platforms.md)) and name it in the report.
+- **Chat**: follow the copy-paste rules in [references/delivery.md](references/delivery.md).
+- **A gist, discussion, wiki page, or hosted platform the user posts to by hand**: shape the post and list its field values per [references/delivery.md](references/delivery.md).
 
-| Mode | What is produced | When to use it |
-|------|------------------|----------------|
-| `direct` | The post file, written to the resolved destination. | The destination is a path this session can write to, and the user wants it written. |
-| `staged` | The post file, written to a staging path, plus a hand-off summary for the user to post manually. | The final destination is one only the user can reach: a hosted platform, an account-bound venue, or any site the user posts to by hand. |
-| `paste` | The post rendered in the reply, ready to copy. No file is written. | The user asked to see it, to be given something to paste, or for a draft to read before deciding. |
+Report what was written and where. Committing, pushing, uploading, or publishing is a separate action that needs its own request.
 
-With `delivery-mode` set to `auto`, read the request:
+Close with up to two one-line offers:
 
-- A named path, or a plain instruction to write or save the post, means
-  `direct`.
-- "I will post it myself", "let me review it first", or a destination needing an
-  account or a browser means `staged`.
-- "Show me", "give me something I can paste", "just draft it", or any request
-  that never mentions a file means `paste`.
-- When the request is genuinely ambiguous, ask at Gate 1 rather than guessing.
-  Writing an unwanted file is the more annoying error of the two.
+- **Link the post from the docs**, when the post has a published URL or a path inside this repository to point to, and the repository already documents this code. That means a README section, a docs page, or a doc comment such as a docstring or JSDoc block that explains what the code does. A plain inline comment, or one that only gives internal context, does not count, and internal-only code gets no offer. The link goes next to that documentation in one line, such as `Walkthrough: <post URL or path>`. Do not create a docs file just to hold it.
+- **Save the voice profile**, when it came from samples, with [assets/voice-profile-template.md](assets/voice-profile-template.md) at a location the user chooses, so the next post can reuse it.
 
-### Copy-paste mode
+## Building the post
 
-The reply is the deliverable, so it has to survive a single copy with no
-cleanup.
-
-- **Render the post in one fenced block.** The post contains its own fenced
-  code sample, so fence the outer block with four backticks so the inner
-  three-backtick fence survives intact.
-- **One block, nothing interleaved.** Notes go after the block, not between
-  pieces of the post.
-- **Include front matter only if the target parses it.** For a hosted editor or
-  a venue with no front matter, deliver the venue shape from
-  `references/pseudo-blog-venues.md` instead.
-- **List field values separately when the target has separate fields.** Give
-  the title, description, tags, and slug as labeled one-liners under the block.
-- **Write no file.** Offer the archive copy in one line and let the user
-  decide.
-
-### Staged mode
-
-The post is written, but the user does the posting.
-
-- **Write to the resolved destination** when the user named one, or to the post
-  store under the chosen category when they did not.
-- **Shape the file for its final home**, not for the staging folder.
-- **Follow the file with a hand-off summary**: the destination, the path
-  written, the title, description, slug, and tags, and which of those go in
-  which field at the destination.
-- **Name any manual step that remains**, such as clearing a draft flag,
-  choosing a canonical URL, or selecting tags from a fixed list.
-- **Do not post, upload, commit, or push.** Staged mode ends at the hand-off.
-
-Mode does not weaken the gates. Confirmation still comes first, and nothing
-reaches a public venue without approval.
-
-## Step 5: Apply the Security and Content Rules
-
-These rules are absolute and apply to everything that goes into a post.
-
-| # | Rule | Detail |
-|---|------|--------|
-| 1 | **Never include credentials or secure data** | No API keys, tokens, passwords, secrets, connection strings, private URLs, internal hostnames or IPs, account IDs, environment variable values, file paths revealing user or machine names, or personal information. Substitute an obvious placeholder such as `YOUR_API_KEY` or `https://api.example.com`. |
-| 2 | **Use cliche sample data only** | `"Hello, World!"`, `John Doe`, `Jane Smith`, `user@example.com`, `foo` / `bar` / `baz`, `123 Main St`, `Lorem ipsum`, `42`, `widgets`, `Acme Corp`. |
-| 3 | **Never use prompt data** | Do not copy, paraphrase, or recycle anything from the conversation, the user's request, or the repository's real data. No real names, project names, business terms, file names, or values from the working context. |
-| 4 | **Rewrite, do not copy** | Generalize the code into a clean demonstration: rename project-specific identifiers to generic ones, strip unrelated logic, remove internal dependencies. |
-
-## Step 6: Build the Post
-
-The post explains **one specific purpose** of the code, framed as an
-informational walkthrough of how to use it. Include:
+The post explains one specific purpose of the code as an informational walkthrough. It contains:
 
 - A title naming the problem the code solves.
 - A short opening stating what the code does and the single use case covered.
 - The generalized function, method, or tool in one code block.
-- A minimal usage example with cliche data and the expected output.
+- A minimal usage example with cliche sample data and the expected output.
 - A closing note on limits or edge cases, when there is something worth saying.
 
-Keep it to one post file with one code sample. A walkthrough that needs several
-files is not a fit for this skill.
+The implementation and its usage count as one worked example, and can share a block where the language makes that natural. A second, unrelated example, or a walkthrough that needs several files, is out of scope.
 
-### Post file layout
+The voice profile decides how these parts are worded, ordered, and headed. It never drops a required part and never overrides the security rules.
 
-```
+Apply SEO at the level that fits the destination, per [references/seo.md](references/seo.md): `full` for a published blog, `light` for a plain file or a chat draft with no destination yet, `venue` for a gist-style page, `internal` for a documentation set. A level the user asks for, including none, wins. Where the site's own conventions or the author's voice clearly differ from an SEO default (title style, tagging, linking habits), the site and the author win.
+
+### Default post layout
+
+Use this layout only where YAML front matter is read as metadata and no site defines its own fields, such as a standalone Markdown file saved at a path the user names, or a platform that accepts front matter on paste:
+
+```markdown
+---
 title: <Post title>
-description: <One sentence stating what the post demonstrates>
+description: <One sentence, 140 to 160 characters, leading with what the reader gets>
 slug: <lowercase-hyphenated-slug>
-category: <category>
-tags: <tag>, <tag>, <tag>
+category: <domain, such as string-utils or file-io>
+tags: [<tag>, <tag>, <tag>]
 date: <YYYY-MM-DD>
 ---
+
 <post body in Markdown>
 ```
 
-The description is one sentence, written with no project or prompt details. It
-doubles as the meta description, so keep it between 140 and 160 characters and
-lead with what the reader gets.
+- A site's own front matter wins over this layout: map these values onto the fields it already uses and drop any it does not read.
+- A destination that does not parse front matter never gets this block. That covers a gist, a Discussions post, a wiki page, most hosted editors, and a chat draft whose target is still unknown. Use the shape in **Venues with no front matter** in [references/delivery.md](references/delivery.md) instead, which moves the title into the first heading and the description into the opening line.
 
-When the workspace is a blog or site, its own front matter fields win over this
-layout. Map these values onto the fields that site already uses and drop any it
-does not read.
+## Security and content rules
 
-## Step 7: Optimize for Search
+These rules apply to everything that goes into a post, whatever the destination or voice.
 
-Read `references/seo-optimization.md` and apply the level matching the
-destination settled in **Step 3**: `full` for a published site, `light` for the
-post store, `venue` for a pseudo-blog venue, `internal` for a documentation
-set. Keywords come from the technology, never from a project, client,
-organization, repository, or internal product name.
+1. **No credentials or secure data.** No API keys, tokens, passwords, secrets, connection strings, private URLs, internal hostnames or IPs, account IDs, environment variable values, file paths that reveal user or machine names, or personal information beyond the public byline rule 6 allows. Replace anything the code needs with an obvious placeholder such as `YOUR_API_KEY` or `https://api.example.com`.
+2. **Cliche sample data only.** For example `"Hello, World!"`, `Jane Smith`, `user@example.com`, `foo` / `bar` / `baz`, `123 Main St`, `42`, `Acme Corp`. When the code needs data the list lacks, such as accented text or a date, choose something equally generic (`Café`, `2026-01-01`), never a value from the working context.
+3. **No incidental detail from the working context or the samples.** People's names other than the byline, project, client, and internal product names, business terms, internal file names, and values from the conversation stay out, and so does content from the voice samples. Code or a topic the user supplies directly is the subject rather than incidental detail: use it, generalized under rule 4 and held to rule 1.
+4. **Rewrite, don't copy.** Generalize the code into a clean demonstration: rename project-specific identifiers, strip unrelated logic, and remove internal dependencies.
+5. **Paths in samples follow the sample.** A PowerShell or batch sample shows Windows paths, a shell sample shows POSIX paths, and a cross-platform sample shows both or a token such as `<config-dir>`.
+6. **Public attribution and public technology keep their real names.** When the destination has an author or byline field, fill it with the value the author's existing posts there use, or with the name the user gives. Never take it from elsewhere in the working context, such as git config or a system account. The full draft shows it, so approval covers it. Public languages, frameworks, libraries, and tools the code uses, such as Python, React, or SQLite, are named as they are.
 
-## Step 8: Gate 1 - Before Writing
+## Limitations
 
-Do not create or modify any file until the user confirms. Present, in a few
-lines:
-
-- The code being written up and the single purpose the post covers.
-- Whether this creates a new doc file in the workspace, and the exact path the
-  post will be written to.
-- The category and file name.
-- The working title, the slug, and the SEO level in effect.
-- The delivery mode, and the destination as it resolved.
-
-Wait for confirmation. On a decline, stop and write nothing.
-
-In `paste` mode there is no file to guard, so this gate does not need its own
-round trip. State the subject, the destination shape, and the mode in the same
-reply that carries the post.
-
-## Step 9: Gate 2 - Before Posting
-
-After the post file is written, show the post and get approval before it is
-published, committed, or pushed anywhere.
-
-- **`automation-mode` is `true`**: show the full post content, then ask a
-  direct yes or no. Take no publishing action on silence or on anything short
-  of an explicit yes.
-- **`automation-mode` is `false`**: show the full post content and ask for
-  approval, inviting edits. Apply any requested changes, show the revised post,
-  and ask again. Publish only on approval.
-
-In `paste` mode the rendered block is this gate: present it, invite edits, and
-revise on request. In `staged` mode this gate closes at the hand-off summary.
-Do not treat approval as permission to post on the user's behalf.
-
-### Publishing
-
-Publishing is a file operation. Do not call an external upload or CLI
-publishing tool from this skill. After Gate 2 approval:
-
-1. Write the post file to the path agreed at Gate 1.
-2. When the workspace is a blog or site, place the file where that site expects
-   posts and in its front matter format. Clear the draft flag at this point if
-   the platform has one.
-3. When the destination is a pseudo-blog venue, write the venue-shaped copy as
-   described in `references/pseudo-blog-venues.md`, and report the venue
-   description and file name to use.
-4. When the post is archived to the post store as well, write the same content
-   there under the chosen category.
-5. Report the path or paths written.
-
-Committing or pushing the post is a separate action and needs its own request
-from the user, as is uploading it to a pseudo-blog venue.
-
-## Step 10: Link in Documentation (Conditional)
-
-After the post is written, decide whether to add a link to it from the
-repository's documentation.
-
-**Add the link when both are true:**
-
-- The repository already documents the code (README, a `docs/` folder, or a doc
-  comment on the function), **and**
-- The post gives readers a useful standalone walkthrough.
-
-**Do not add the link when:**
-
-- No documentation exists for that code. Do not create a new docs file just to
-  hold the link.
-- The code is internal or private-only and is not meant for outside use.
-
-When adding it, place it next to the existing documentation for that code, on
-one line:
-
-```
-Walkthrough: <post URL or path>
-```
-
-## Step 11: Report Completion
-
-Only if the post was approved and delivered successfully, end the response with
-exactly:
-
-```
-BLOG POST MADE
-```
-
-Delivered means the file was written in `direct` mode, the file and hand-off
-summary were given in `staged` mode, or the post was rendered in `paste` mode.
-
-If the user declines at either gate, say so in one sentence and do not print
-that line. If writing fails, report the failure in one sentence and do not
-print that line.
-
-## Troubleshooting
-
-| Issue | Solution |
-|-------|----------|
-| Code fails the qualification test | Stay silent. Do not mention this skill or the post workflow at all. |
-| Duplicate post found | Skip entirely. Do not create a second post for the same code. |
-| Unsure which category folder to use | List existing folders under the post store root and reuse a matching one before creating a new one. |
-| Post store root does not exist | Create category folders under an existing root only. If the root itself is missing, stop and ask. |
-| Site build rejects the post | Open a neighboring post in the same folder and copy its front matter field set exactly. See `references/blog-platforms.md`. |
-| Front matter renders as body text | The destination does not parse front matter. Reshape the post per `references/pseudo-blog-venues.md`. |
-| Unsure whether to write a file | Ask at Gate 1. Writing an unwanted file is the more annoying error. |
-
-## References
-
-- `references/blog-platforms.md` - detection, posts folder, and front matter
-  contract for common static site generators and hosted platforms.
-- `references/pseudo-blog-venues.md` - shaping a post for a venue with no front
-  matter, with a worked gist example.
-- `references/seo-optimization.md` - optimization levels, keyword sourcing,
-  title, slug, headings, tags, linking, and structured data.
+- One post, one purpose, one worked example.
+- A full voice match needs at least three samples. With fewer, the profile is thin or neutral, and the plan check says so.
+- The skill writes files. It does not publish, upload, commit, or push.

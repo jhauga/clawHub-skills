@@ -1,5 +1,50 @@
 # ClawHub Skills TODO
 
+## Restructure by Category
+
+> Move each skill folder into a category folder. The folder a skill sits in is its category, and new or unsorted skills land in `uncategorized/` until one is chosen.
+
+- [ ] Create category folders: `3d/`, `ai-tools/`, `automation/`, `coding/`, `documentation/`, `graphic-design/`, `vibe-coding/`
+- [ ] Add `uncategorized/` as the landing folder for new or unsorted skills
+- [ ] Add `categories.json` listing each valid category folder with a one-line description (skills are not listed, so folder location stays the single source of truth)
+- [ ] Move skills with `git mv` so file history follows each folder:
+  - [ ] `3d/`: rhino3d-scripts, freecad-scripts, rhino3d-plugins
+  - [ ] `ai-tools/`: finalize-agent-prompt, make-skill-template, update-docs-on-code-change, fix-broken-links, automate-todo, make-blog-post
+  - [ ] `automation/`: no skills assigned yet; Git does not track empty folders, so add a `README.md` describing the category
+  - [ ] `coding/`: web-coder, html-coder, game-engine, pdftk-server, typescript-coder, typescript-package-manager, create-web-form, content-management-systems, batch-files, markdown-to-html-converter, legacy-circuit-mockups
+  - [ ] `documentation/`: write-coding-standards-from-file, use-cliche-data-in-docs, add-educational-comment, convert-plaintext-to-md, create-tldr-page, tldr-prompt, shuffle-json-data, exclude-prompt-data, em-dash
+  - [ ] `graphic-design/`: html-designer, adobe-illustrator-scripting, graphic-designer, html-css-style-color-guide
+  - [ ] `vibe-coding/`: quasi-coder, multi-lang-coder, vibe-code
+- [ ] Add `scripts/categorize.js <skillName> <category>` to move a skill between categories (including out of `uncategorized/`) with `git mv` and rewrite its README links
+- [ ] Update `scripts/newSkill.js`:
+  - [ ] Accept `--category <name>`, defaulting to `uncategorized`, and reject names missing from `categories.json`
+  - [ ] Find skill folders inside category folders instead of only the repo root
+  - [ ] Write repo links as `<category>/<skillName>/SKILL.md`
+- [ ] Decide the README layout: a Category column in the single table, or one table per category; keep the letter anchor nav working either way
+- [ ] Extend the planned `scripts/auditSkills.js` to flag skills left at the repo root and category folders missing from `categories.json`
+- [ ] Fix relative links in `SKILL.md` and `references/` files that break after the move
+- [ ] Add a README Quickstart: add a skill, categorize it, audit the repo
+
+## Local Skill Manager
+
+> Make this repo the source of truth for local AI skills, installed into the skills folder of each AI tool that reads `SKILL.md` (Claude Code, GitHub Copilot, Codex, and others).
+
+- [ ] Record each tool's user and project skill folders, verified against current docs, e.g.:
+  - [ ] Claude Code: `~/.claude/skills/` and `.claude/skills/`
+  - [ ] GitHub Copilot: `~/.copilot/skills/` and `.github/skills/`
+  - [ ] Codex: `~/.codex/skills/`
+- [ ] Add a tool registry (e.g. `tools.json`) with each tool's name and skill folders, so supporting a new tool is one new entry, not new code
+- [ ] Add `scripts/syncSkills.js`:
+  - [ ] `install`: link or copy skills into a tool's folder, filtered by `--tool <name|all>` and `--skill <name|category|all>`
+  - [ ] Link with a directory junction on Windows (no admin rights needed) or a symlink elsewhere, with a `--copy` fallback
+  - [ ] `status`: list which skills are installed for which tool, and flag copies that drifted from the repo
+  - [ ] `import`: bring a local skill that is not in the repo into `uncategorized/`
+  - [ ] `remove`: uninstall a skill from a tool folder without touching the repo
+  - [ ] `--dry-run` on every command that writes
+- [ ] Add optional per-skill tool targeting (frontmatter field or registry entry) for skills that only suit some tools
+- [ ] Fold the `scripts/syncGithubSkill.js` idea from Minor Ideas into the `github` target of `syncSkills.js`
+- [ ] Add a Quickstart for the sync workflow to the README
+
 ## Infrastructure
 
 - [x] Script for updating README table (`scripts/newSkill.js`)
