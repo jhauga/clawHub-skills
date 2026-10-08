@@ -2,10 +2,9 @@
 
 ## Restructure by Category
 
-> Move each skill folder into a category folder. The folder a skill sits in is its category, and new or unsorted skills land in `uncategorized/` until one is chosen.
+> Move each skill folder into a category folder. The folder a skill sits in is its category. New skills stay at the repo root until they are categorized, so any skill at the root is uncategorized.
 
 - [ ] Create category folders: `3d/`, `ai-tools/`, `automation/`, `coding/`, `documentation/`, `graphic-design/`, `vibe-coding/`
-- [ ] Add `uncategorized/` as the landing folder for new or unsorted skills
 - [ ] Add `categories.json` listing each valid category folder with a one-line description (skills are not listed, so folder location stays the single source of truth)
 - [ ] Move skills with `git mv` so file history follows each folder:
   - [ ] `3d/`: rhino3d-scripts, freecad-scripts, rhino3d-plugins
@@ -15,15 +14,16 @@
   - [ ] `documentation/`: write-coding-standards-from-file, use-cliche-data-in-docs, add-educational-comment, convert-plaintext-to-md, create-tldr-page, tldr-prompt, shuffle-json-data, exclude-prompt-data, em-dash
   - [ ] `graphic-design/`: html-designer, adobe-illustrator-scripting, graphic-designer, html-css-style-color-guide
   - [ ] `vibe-coding/`: quasi-coder, multi-lang-coder, vibe-code
-- [ ] Add `scripts/categorize.js <skillName> <category>` to move a skill between categories (including out of `uncategorized/`) with `git mv` and rewrite its README links
+- [ ] Add `scripts/categorize.js <skillName> <category>` to move a skill from the repo root (or another category) into a category with `git mv`, rewrite its README links to `<category>/<skillName>/SKILL.md`, and refresh the table with `sortTable.js`
+- [ ] Add `scripts/skillPath.js <skillName>` that prints a skill's folder (repo root or `<category>/<skillName>`), so local automation never hardcodes the layout
 - [ ] Update `scripts/newSkill.js`:
-  - [ ] Accept `--category <name>`, defaulting to `uncategorized`, and reject names missing from `categories.json`
-  - [ ] Find skill folders inside category folders instead of only the repo root
-  - [ ] Write repo links as `<category>/<skillName>/SKILL.md`
+  - [ ] Keep adding new skills at the repo root (no category option)
+  - [ ] Match README rows whose link has a category prefix in `skillRowExists` and `removeSkillRow`, so a new root skill cannot duplicate a categorized one
+- [ ] Update local automation that replaces an existing skill folder by its root path (publish and PR helper scripts) to look the folder up with `skillPath.js`; new skills still land at the root, so their copy steps stay the same
 - [ ] Decide the README layout: a Category column in the single table, or one table per category; keep the letter anchor nav working either way
-- [ ] Extend the planned `scripts/auditSkills.js` to flag skills left at the repo root and category folders missing from `categories.json`
+- [ ] Extend the planned `scripts/auditSkills.js` to list root skills as uncategorized (a report, not an error) and flag category folders missing from `categories.json`
 - [ ] Fix relative links in `SKILL.md` and `references/` files that break after the move
-- [ ] Add a README Quickstart: add a skill, categorize it, audit the repo
+- [ ] Add a README Quickstart: add a skill (it lands at the root), categorize it, audit the repo
 
 ## Local Skill Manager
 
@@ -38,7 +38,7 @@
   - [ ] `install`: link or copy skills into a tool's folder, filtered by `--tool <name|all>` and `--skill <name|category|all>`
   - [ ] Link with a directory junction on Windows (no admin rights needed) or a symlink elsewhere, with a `--copy` fallback
   - [ ] `status`: list which skills are installed for which tool, and flag copies that drifted from the repo
-  - [ ] `import`: bring a local skill that is not in the repo into `uncategorized/`
+  - [ ] `import`: bring a local skill that is not in the repo into the repo root, where it stays uncategorized until `categorize.js` moves it
   - [ ] `remove`: uninstall a skill from a tool folder without touching the repo
   - [ ] `--dry-run` on every command that writes
 - [ ] Add optional per-skill tool targeting (frontmatter field or registry entry) for skills that only suit some tools
