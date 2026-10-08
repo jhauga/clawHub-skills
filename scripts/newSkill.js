@@ -12,22 +12,32 @@
  *
  * Requirements:
  *   - A folder with the skill name must exist in the workspace root
+ *   - The skill name must NOT already exist in a category folder
  *   - A row with the skill name must NOT already exist in the README.md table
  *
- * After inserting the row, the table is re-sorted and its letter anchors and
- * anchor nav are refreshed (see sortTable.js).
+ * New skills stay at the repo root and are listed as uncategorized until
+ * scripts/categorize.js moves them into a category folder. After inserting the
+ * row, the table is re-sorted and its letter anchors and anchor nav are
+ * refreshed (see sortTable.js).
  */
 
 const fs = require('fs');
 const path = require('path');
-const { sortTable, sortSkillsTable, ANCHOR_PATTERN } = require('./sortTable');
+const {
+  sortTable,
+  sortSkillsTable,
+  ANCHOR_PATTERN,
+  TABLE_HEADER_PATTERN,
+  UNCATEGORIZED_CELL,
+} = require('./sortTable');
+const { findSkills } = require('./skillPath');
 
 // Configuration
 const README_PATH = path.join(__dirname, '..', 'README.md');
 const WORKSPACE_ROOT = path.join(__dirname, '..');
 
-// Row template with placeholders
-const ROW_TEMPLATE = '| [CHANGE_SKILLNAME](CHANGE_SKILLNAME/SKILL.md) (*repo*) <br> [CHANGE_SKILLNAME](https://clawhub.ai/jhauga/CHANGE_SKILLNAME) (*on ClawHub*) | CHANGE_SKILL_DESCRIPTION |';
+// Row template with placeholders; new skills start uncategorized at the repo root
+const ROW_TEMPLATE = `| [CHANGE_SKILLNAME](CHANGE_SKILLNAME/SKILL.md) (*repo*) <br> [CHANGE_SKILLNAME](https://clawhub.ai/jhauga/CHANGE_SKILLNAME) (*on ClawHub*) | ${UNCATEGORIZED_CELL} | CHANGE_SKILL_DESCRIPTION |`;
 
 /**
  * Custom error class for skill-related errors
@@ -61,9 +71,19 @@ function folderExists(folderName) {
  * @returns {boolean}
  */
 function skillRowExists(skillName, readmeContent) {
-  // Match skill name in table row format: [skillName](skillName/, with or without a letter anchor
-  const pattern = new RegExp(`\\|\\s*(?:${ANCHOR_PATTERN})?\\[${escapeRegExp(skillName)}\\]\\(${escapeRegExp(skillName)}/`, 'i');
-  return pattern.test(readmeContent);
+  return skillRowPattern(skillName, 'im').test(readmeContent);
+}
+
+/**
+ * Build a pattern matching the start of a skill's table row:
+ * | [skillName](skillName/ or | [skillName](category/skillName/, with or without a letter anchor
+ * @param {string} skillName - Name of the skill
+ * @param {string} [flags] - RegExp flags
+ * @returns {RegExp}
+ */
+function skillRowPattern(skillName, flags = 'i') {
+  const name = escapeRegExp(skillName);
+  return new RegExp(`^\\|\\s*(?:${ANCHOR_PATTERN})?\\[${name}\\]\\((?:[^)/\\s]+/)?${name}/`, flags);
 }
 
 /**
@@ -83,8 +103,7 @@ function escapeRegExp(string) {
  */
 function findInsertionPoint(content) {
   // Find the Skills table by looking for the header row
-  const tableHeaderPattern = /\|\s*Skill\s*\|\s*Description\s*\|/i;
-  const headerMatch = content.match(tableHeaderPattern);
+  const headerMatch = content.match(TABLE_HEADER_PATTERN);
 
   if (!headerMatch) {
     throw new SkillError('Skills table not found in README.md', 'TABLE_NOT_FOUND');
@@ -137,8 +156,7 @@ function generateRow(skillName, description) {
  * @returns {number} - Number of skill rows
  */
 function countSkillRows(content) {
-  const tableHeaderPattern = /\|\s*Skill\s*\|\s*Description\s*\|/i;
-  const headerMatch = content.match(tableHeaderPattern);
+  const headerMatch = content.match(TABLE_HEADER_PATTERN);
   if (!headerMatch) return 0;
 
   const afterHeader = content.slice(headerMatch.index);
@@ -197,6 +215,15 @@ function addSkill(skillName, description) {
     throw new SkillError(
       `Folder "${skillName}" does not exist. Create the skill folder first.`,
       'FOLDER_NOT_FOUND'
+    );
+  }
+
+  // A categorized skill with the same name would be duplicated by a new root skill
+  const categorized = findSkills(skillName).find((skill) => skill.category);
+  if (categorized) {
+    throw new SkillError(
+      `Skill "${skillName}" already exists in "${categorized.relPath}".`,
+      'SKILL_EXISTS'
     );
   }
 
@@ -263,13 +290,12 @@ function removeSkillRow(skillName) {
     throw new SkillError(`Failed to read README.md: ${err.message}`, 'README_READ_ERROR');
   }
 
-  // Build the exact row pattern to remove, with or without a letter anchor
-  const rowPattern = new RegExp(
-    `\\| (?:${ANCHOR_PATTERN})?\\[${escapeRegExp(skillName)}\\]\\(${escapeRegExp(skillName)}/SKILL\\.md\\) \\(\\*repo\\*\\) <br> \\[${escapeRegExp(skillName)}\\]\\(https://clawhub\\.ai/jhauga/${escapeRegExp(skillName)}\\) \\(\\*on ClawHub\\*\\) \\| [^|]+ \\|\\n?`,
-    'g'
-  );
-
-  const updatedContent = readmeContent.replace(rowPattern, '');
+  // Drop the skill's row, with or without a letter anchor or category folder in its link
+  const rowPattern = skillRowPattern(skillName);
+  const updatedContent = readmeContent
+    .split('\n')
+    .filter((line) => !rowPattern.test(line))
+    .join('\n');
 
   // Clean up any duplicate empty lines that might result
   const cleanedContent = updatedContent.replace(/\n{3,}/g, '\n\n');
@@ -340,7 +366,7 @@ function runTest() {
     // Step 3: Verify the row was added to README.md
     console.log('[3/6] Verifying skill row exists in README.md...');
     const readmeContent = fs.readFileSync(README_PATH, 'utf8');
-    const expectedRowFragment = `[${TEST_SKILL_NAME}](${TEST_SKILL_NAME}/SKILL.md) (*repo*) <br> [${TEST_SKILL_NAME}](https://clawhub.ai/jhauga/${TEST_SKILL_NAME}) (*on ClawHub*) | ${TEST_DESCRIPTION} |`;
+    const expectedRowFragment = `[${TEST_SKILL_NAME}](${TEST_SKILL_NAME}/SKILL.md) (*repo*) <br> [${TEST_SKILL_NAME}](https://clawhub.ai/jhauga/${TEST_SKILL_NAME}) (*on ClawHub*) | ${UNCATEGORIZED_CELL} | ${TEST_DESCRIPTION} |`;
 
     if (!readmeContent.includes(expectedRowFragment)) {
       throw new SkillError('Verification failed: skill row not found in README.md', 'VERIFICATION_FAILED');
@@ -428,7 +454,11 @@ Options:
 
 Requirements:
   - A folder with the skill name must exist in the workspace root
+  - The skill name must NOT already exist in a category folder
   - A row with the skill name must NOT already exist in the README.md table
+
+New skills are listed as uncategorized until moved into a category with:
+  node scripts/categorize.js <skillName> <category>
 
 Examples:
   node scripts/newSkill.js my-new-skill

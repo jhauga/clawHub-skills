@@ -4,26 +4,26 @@
 
 > Move each skill folder into a category folder. The folder a skill sits in is its category. New skills stay at the repo root until they are categorized, so any skill at the root is uncategorized.
 
-- [ ] Create category folders: `3d/`, `ai-tools/`, `automation/`, `coding/`, `documentation/`, `graphic-design/`, `vibe-coding/`
-- [ ] Add `categories.json` listing each valid category folder with a one-line description (skills are not listed, so folder location stays the single source of truth)
-- [ ] Move skills with `git mv` so file history follows each folder:
-  - [ ] `3d/`: rhino3d-scripts, freecad-scripts, rhino3d-plugins
-  - [ ] `ai-tools/`: finalize-agent-prompt, make-skill-template, update-docs-on-code-change, fix-broken-links, automate-todo, make-blog-post
-  - [ ] `automation/`: no skills assigned yet; Git does not track empty folders, so add a `README.md` describing the category
-  - [ ] `coding/`: web-coder, html-coder, game-engine, pdftk-server, typescript-coder, typescript-package-manager, create-web-form, content-management-systems, batch-files, markdown-to-html-converter, legacy-circuit-mockups
-  - [ ] `documentation/`: write-coding-standards-from-file, use-cliche-data-in-docs, add-educational-comment, convert-plaintext-to-md, create-tldr-page, tldr-prompt, shuffle-json-data, exclude-prompt-data, em-dash
-  - [ ] `graphic-design/`: html-designer, adobe-illustrator-scripting, graphic-designer, html-css-style-color-guide
-  - [ ] `vibe-coding/`: quasi-coder, multi-lang-coder, vibe-code
-- [ ] Add `scripts/categorize.js <skillName> <category>` to move a skill from the repo root (or another category) into a category with `git mv`, rewrite its README links to `<category>/<skillName>/SKILL.md`, and refresh the table with `sortTable.js`
-- [ ] Add `scripts/skillPath.js <skillName>` that prints a skill's folder (repo root or `<category>/<skillName>`), so local automation never hardcodes the layout
-- [ ] Update `scripts/newSkill.js`:
-  - [ ] Keep adding new skills at the repo root (no category option)
-  - [ ] Match README rows whose link has a category prefix in `skillRowExists` and `removeSkillRow`, so a new root skill cannot duplicate a categorized one
-- [ ] Update local automation that replaces an existing skill folder by its root path (publish and PR helper scripts) to look the folder up with `skillPath.js`; new skills still land at the root, so their copy steps stay the same
-- [ ] Decide the README layout: a Category column in the single table, or one table per category; keep the letter anchor nav working either way
-- [ ] Extend the planned `scripts/auditSkills.js` to list root skills as uncategorized (a report, not an error) and flag category folders missing from `categories.json`
-- [ ] Fix relative links in `SKILL.md` and `references/` files that break after the move
-- [ ] Add a README Quickstart: add a skill (it lands at the root), categorize it, audit the repo
+- [x] Create category folders: `3d/`, `ai-tools/`, `automation/`, `coding/`, `documentation/`, `graphic-design/`, `vibe-coding/`
+- [x] Add `categories.json` listing each valid category folder with a one-line description (skills are not listed, so folder location stays the single source of truth)
+- [x] Move skills with `git mv` so file history follows each folder:
+  - [x] `3d/`: rhino3d-scripts, freecad-scripts, rhino3d-plugins
+  - [x] `ai-tools/`: finalize-agent-prompt, make-skill-template, update-docs-on-code-change, fix-broken-links, automate-todo, make-blog-post
+  - [x] `automation/`: no skills assigned yet; Git does not track empty folders, so add a `README.md` describing the category
+  - [x] `coding/`: web-coder, html-coder, game-engine, pdftk-server, typescript-coder, typescript-package-manager, create-web-form, content-management-systems, batch-files, markdown-to-html-converter, legacy-circuit-mockups
+  - [x] `documentation/`: write-coding-standards-from-file, use-cliche-data-in-docs, add-educational-comment, convert-plaintext-to-md, create-tldr-page, tldr-prompt, shuffle-json-data, exclude-prompt-data, em-dash
+  - [x] `graphic-design/`: html-designer, adobe-illustrator-scripting, graphic-designer, html-css-style-color-guide
+  - [x] `vibe-coding/`: quasi-coder, multi-lang-coder, vibe-code
+- [x] Add `scripts/categorize.js <skillName> <category>` to move a skill from the repo root (or another category) into a category with `git mv`, rewrite its README links to `<category>/<skillName>/SKILL.md`, and refresh the table with `sortTable.js`
+- [x] Add `scripts/skillPath.js <skillName>` that prints a skill's folder (repo root or `<category>/<skillName>`), so local automation never hardcodes the layout
+- [x] Update `scripts/newSkill.js`:
+  - [x] Keep adding new skills at the repo root (no category option)
+  - [x] Match README rows whose link has a category prefix in `skillRowExists` and `removeSkillRow`, so a new root skill cannot duplicate a categorized one
+- [x] Update local automation that replaces an existing skill folder by its root path (publish and PR helper scripts) to look the folder up with `skillPath.js`; new skills still land at the root, so their copy steps stay the same
+- [x] Decide the README layout: a Category column in the single table, or one table per category; keep the letter anchor nav working either way (chose a Category column)
+- [x] Extend the planned `scripts/auditSkills.js` to list root skills as uncategorized (a report, not an error) and flag category folders missing from `categories.json`
+- [x] Fix relative links in `SKILL.md` and `references/` files that break after the move
+- [x] Add a README Quickstart: add a skill (it lands at the root), categorize it, audit the repo
 
 ## Local Skill Manager
 
@@ -51,9 +51,9 @@
 - [ ] Add helper scripts:
   - [ ] Clear out todo lines that are marked complete
   - [ ] Validate SKILL.md frontmatter (require `name` and `description` fields)
-  - [ ] Audit README table — flag rows whose folder does not exist
-  - [ ] Audit skill folders — flag any folder missing a `SKILL.md`
-  - [ ] Auto-update the "Total: N" count in README.md
+  - [x] Audit README table — flag rows whose folder does not exist
+  - [x] Audit skill folders — flag any folder missing a `SKILL.md`
+  - [x] Auto-update the "Total: N" count in README.md
 
 ## Published to ClawHub
 
@@ -130,7 +130,7 @@
 - [ ] Add `CHANGELOG.md` to track repo-level changes across skill updates
 - [ ] Add `CONTRIBUTING.md` with guide for adding skills and PR conventions
 - [ ] Add `scripts/clearCompleted.js` — strip `- [x]` lines from `TODO.md` on demand
-- [ ] Add `scripts/auditSkills.js` — cross-check folders vs README table and report gaps
+- [x] Add `scripts/auditSkills.js` — cross-check folders vs README table and report gaps
 - [ ] Add `scripts/syncGithubSkill.js` — copy a skill folder into `.github/skills/`
 - [ ] Add `scripts/validateFrontmatter.js` — verify `name` and `description` present in all `SKILL.md` files
 - [ ] Add `templates/` folder with a starter `SKILL.md` scaffold for `make-skill-template`
@@ -143,13 +143,13 @@
 
 > Small fixes, cleanups, and consistency corrections.
 
-- [ ] Fix `pdftk-server` README table link — add `/SKILL.md` to match every other row
+- [x] Fix `pdftk-server` README table link — add `/SKILL.md` to match every other row
 - [ ] Write real description for `html-coder` (currently "Skill that covers html-coder.")
 - [ ] Write real description for `html-designer` (currently "Skill that covers html-designer.")
 - [ ] Write real description for `typescript-package-manager` (currently generic)
-- [ ] Verify `README.md` "Total: 26" count stays accurate as skills are added or removed
+- [x] Verify `README.md` "Total: 26" count stays accurate as skills are added or removed
 - [ ] Verify all 26 ClawHub profile links in README are live and resolve correctly
-- [ ] Verify all 26 repo `SKILL.md` links in README resolve to existing files
+- [x] Verify all 26 repo `SKILL.md` links in README resolve to existing files
 - [ ] Add `.editorconfig` for consistent indentation and line endings across editors
 - [ ] Normalize frontmatter `name` field to exactly match the skill folder name in all skills
 - [ ] Standardize em-dash vs plain dash usage across all `SKILL.md` descriptions

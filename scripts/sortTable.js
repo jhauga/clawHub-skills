@@ -2,27 +2,40 @@
 
 /**
  * sortTable.js - Sort the Skills table in README.md alphabetically by skill name
- * and keep its letter anchors and anchor nav in sync.
+ * and keep its links, categories, letter anchors, and anchor nav in sync.
  *
  * Usage:
  *   node scripts/sortTable.js
  *
  * Behavior:
- *   - Locates the Skills table (header: | Skill | Description |) in README.md
+ *   - Locates the Skills table (header: | Skill | Category | Description |) in
+ *     README.md, adding the Category column if the table does not have it yet
+ *   - Points each row's repo link at the skill's current folder and fills the
+ *     Category cell from it (see skillPath.js), so moving a folder only needs a rerun
  *   - Sorts data rows alphabetically (case-insensitive) by the skill name found
  *     in the first markdown link of the Skill column
  *   - Moves each letter anchor (<span id="x"></span>) to the first skill that
  *     starts with that letter, and drops anchors for letters with no skills
  *   - Rebuilds the anchor nav table above the Skills table so it links to every
  *     anchor, e.g. | [A](#a) | [B](#b) |
- *   - Preserves the header row, separator row, and surrounding content
+ *   - Preserves the surrounding content
  *   - Writes the result back to README.md
  */
 
 const fs = require('fs');
 const path = require('path');
+const { listSkills } = require('./skillPath');
 
 const README_PATH = path.join(__dirname, '..', 'README.md');
+
+// Skills table header, with or without the Category column
+const TABLE_HEADER_PATTERN = /\|\s*Skill\s*\|(?:\s*Category\s*\|)?\s*Description\s*\|/i;
+
+const TABLE_HEADER_ROW = '| Skill | Category | Description |';
+const TABLE_SEPARATOR_ROW = '|-------|----------|-------------|';
+
+// Category cell for a skill that still sits at the repo root
+const UNCATEGORIZED_CELL = '*uncategorized*';
 
 // Letter anchor that may lead the Skill cell, e.g. <span id="a"></span>
 const ANCHOR_PATTERN = '<span\\b[^>]*>\\s*</span>\\s*';
@@ -51,6 +64,54 @@ function getSkillNameFromRow(row) {
  */
 function stripAnchor(row) {
   return row.replace(new RegExp(`^\\|\\s*${ANCHOR_PATTERN}`), '| ');
+}
+
+/**
+ * Split a table row into trimmed cells. Escaped pipes (\|) stay inside a cell.
+ * @param {string} row
+ * @returns {string[]}
+ */
+function splitCells(row) {
+  return row.trim().replace(/^\|/, '').replace(/\|$/, '').split(/(?<!\\)\|/).map((cell) => cell.trim());
+}
+
+/**
+ * Join cells back into a table row.
+ * @param {string[]} cells
+ * @returns {string}
+ */
+function joinCells(cells) {
+  return `| ${cells.join(' | ')} |`;
+}
+
+/**
+ * Build the Category cell for a skill.
+ * @param {string|null} category
+ * @returns {string}
+ */
+function categoryCell(category) {
+  return category ? `[${category}](${category}/)` : UNCATEGORIZED_CELL;
+}
+
+/**
+ * Give a data row a Category cell, then point its repo link and Category cell
+ * at the skill's current folder. Rows whose folder is missing keep their link.
+ * @param {string} row - Row without a letter anchor
+ * @param {Map<string, { category: string|null, relPath: string }>} skillsByName
+ * @returns {string}
+ */
+function syncRowWithFolder(row, skillsByName) {
+  const cells = splitCells(row);
+  if (cells.length === 2) cells.splice(1, 0, '');
+
+  const skill = skillsByName.get(getSkillNameFromRow(row));
+  if (skill) {
+    cells[0] = cells[0].replace(/\]\([^)]*\)/, `](${skill.relPath}/SKILL.md)`);
+    cells[1] = categoryCell(skill.category);
+  } else if (!cells[1]) {
+    cells[1] = UNCATEGORIZED_CELL;
+  }
+  return joinCells(cells);
 }
 
 /**
@@ -111,13 +172,14 @@ function updateAnchorNav(before, ids) {
 }
 
 /**
- * Sort the Skills table in README.md content and refresh its letter anchors.
+ * Sort the Skills table in README.md content, sync rows with skill folders,
+ * and refresh its letter anchors.
  * @param {string} content
+ * @param {{ name: string, category: string|null, relPath: string }[]} [skills] - Defaults to the repo's skill folders
  * @returns {string}
  */
-function sortSkillsTable(content) {
-  const tableHeaderPattern = /\|\s*Skill\s*\|\s*Description\s*\|/i;
-  const headerMatch = content.match(tableHeaderPattern);
+function sortSkillsTable(content, skills = listSkills()) {
+  const headerMatch = content.match(TABLE_HEADER_PATTERN);
   if (!headerMatch) {
     throw new Error('Skills table not found in README.md');
   }
@@ -132,15 +194,14 @@ function sortSkillsTable(content) {
     throw new Error('Skills table is malformed (missing separator row)');
   }
 
-  const headerRow = lines[0];
-  const separatorRow = lines[1];
+  const skillsByName = new Map(skills.map((skill) => [skill.name.toLowerCase(), skill]));
 
   // Collect contiguous data rows starting at index 2, dropping old anchors
   const dataRows = [];
   let i = 2;
   for (; i < lines.length; i++) {
     if (lines[i].trim().startsWith('|')) {
-      dataRows.push(stripAnchor(lines[i]));
+      dataRows.push(syncRowWithFolder(stripAnchor(lines[i]), skillsByName));
     } else {
       break;
     }
@@ -156,7 +217,7 @@ function sortSkillsTable(content) {
 
   const { rows: anchoredRows, ids } = applyLetterAnchors(dataRows);
 
-  const rebuiltTable = [headerRow, separatorRow, ...anchoredRows].join('\n');
+  const rebuiltTable = [TABLE_HEADER_ROW, TABLE_SEPARATOR_ROW, ...anchoredRows].join('\n');
   const suffix = rest.length > 0 ? '\n' + rest : '';
   return updateAnchorNav(before, ids) + rebuiltTable + suffix;
 }
@@ -190,8 +251,12 @@ module.exports = {
   sortSkillsTable,
   getSkillNameFromRow,
   stripAnchor,
+  splitCells,
+  categoryCell,
   applyLetterAnchors,
   buildAnchorNav,
   updateAnchorNav,
   ANCHOR_PATTERN,
+  TABLE_HEADER_PATTERN,
+  UNCATEGORIZED_CELL,
 };
