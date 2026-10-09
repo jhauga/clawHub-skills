@@ -1,7 +1,7 @@
 {
   "3d": "3D modeling, CAD scripting, and plugin development.",
-  "ai-tools": "AI agent workflows: prompt and skill authoring, documentation upkeep, TODO automation, and publishing.",
-  "automation": "Task and workflow automation.",
+  "ai-tools": "AI agent prompt and skill authoring, and running large tasks across multiple agent runs.",
+  "automation": "Task and workflow automation: documentation upkeep, link fixing, TODO automation, and publishing.",
   "coding": "Programming languages, web development, frameworks, and command-line tools.",
   "documentation": "Writing, formatting, summarizing, and commenting documentation and data.",
   "graphic-design": "Visual design, color, styling, and illustration scripting.",

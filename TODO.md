@@ -8,8 +8,8 @@
 - [x] Add `categories.json` listing each valid category folder with a one-line description (skills are not listed, so folder location stays the single source of truth)
 - [x] Move skills with `git mv` so file history follows each folder:
   - [x] `3d/`: rhino3d-scripts, freecad-scripts, rhino3d-plugins
-  - [x] `ai-tools/`: finalize-agent-prompt, make-skill-template, update-docs-on-code-change, fix-broken-links, automate-todo, make-blog-post
-  - [x] `automation/`: no skills assigned yet; Git does not track empty folders, so add a `README.md` describing the category
+  - [x] `ai-tools/`: finalize-agent-prompt, make-skill-template
+  - [x] `automation/`: update-docs-on-code-change, fix-broken-links, automate-todo, make-blog-post
   - [x] `coding/`: web-coder, html-coder, game-engine, pdftk-server, typescript-coder, typescript-package-manager, create-web-form, content-management-systems, batch-files, markdown-to-html-converter, legacy-circuit-mockups
   - [x] `documentation/`: write-coding-standards-from-file, use-cliche-data-in-docs, add-educational-comment, convert-plaintext-to-md, create-tldr-page, tldr-prompt, shuffle-json-data, exclude-prompt-data, em-dash
   - [x] `graphic-design/`: html-designer, adobe-illustrator-scripting, graphic-designer, html-css-style-color-guide
