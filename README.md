@@ -9,11 +9,12 @@ Skills are grouped into category folders listed in [categories.json](categories.
 | [A](#a) | [B](#b) | [C](#c) | [E](#e) | [F](#f) | [G](#g) | [H](#h) | [L](#l) | [M](#m) | [P](#p) | [Q](#q) | [R](#r) | [S](#s) | [T](#t) | [U](#u) | [V](#v) | [W](#w) |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 
-### Total: 38
+### Total: 39
 
 | Skill | Category | Description |
 |-------|----------|-------------|
 | <span id="a"></span> [add-educational-comment](documentation/add-educational-comment/SKILL.md) (*repo*) <br> [add-educational-comments](https://clawhub.ai/jhauga/add-educational-comment) (*on ClawHub*) | [documentation](documentation/) | Skill to comment existing code relative to context specified, defaulting to educational comments. |
+| [adobe-after-effects-integrations](graphic-design/adobe-after-effects-integrations/SKILL.md) (*repo*) <br> [adobe-after-effects-integrations](https://clawhub.ai/jhauga/adobe-after-effects-integrations) (*on ClawHub*) | [graphic-design](graphic-design/) | Skill to help write, edit, or debug Adobe After Effects scripts, expressions, extensions, plugins, and MCP servers, or to build automated tools that assemble and render compositions in Adobe After Effects. |
 | [adobe-illustrator-integrations](graphic-design/adobe-illustrator-integrations/SKILL.md) (*repo*) <br> [adobe-illustrator-integrations](https://clawhub.ai/jhauga/adobe-illustrator-integrations) (*on ClawHub*) | [graphic-design](graphic-design/) | Skill to help update, edit, or create complex Adobe Illustrator scripts, extensions, plugins, and MCP servers, or to build automated tools that manage projects using assets created in Adobe Illustrator. |
 | [adobe-illustrator-scripting](graphic-design/adobe-illustrator-scripting/SKILL.md) (*repo*) <br> [adobe-illustrator-scripting](https://clawhub.ai/jhauga/adobe-illustrator-scripting) (*on ClawHub*) | [graphic-design](graphic-design/) | New skill for working with Adobe Illustrator scripts. |
 | [automate-todo](automation/automate-todo/SKILL.md) (*repo*) <br> [automate-todo](https://clawhub.ai/jhauga/automate-todo) (*on ClawHub*) | [automation](automation/) | Skill that covers automate-todo. |
